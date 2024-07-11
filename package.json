@@ -1,0 +1,22 @@
+{
+  "name": "employeeregistration",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Archy Singh",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arcan199815/EmployeeRegistrationFrontend.git"
+  },
+  "keywords": [
+    "frontend"
+  ],
+  "bugs": {
+    "url": "https://github.com/arcan199815/EmployeeRegistrationFrontend/issues"
+  },
+  "homepage": "https://github.com/arcan199815/EmployeeRegistrationFrontend#readme"
+}
