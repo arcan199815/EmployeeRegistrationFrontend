@@ -56,10 +56,10 @@ function SignUpComponent() {
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
+                  id="empId"
+                  label="Employee Id"
+                  name="empId"
+                  autoComplete="off"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -72,6 +72,7 @@ function SignUpComponent() {
                   autoComplete="email"
                 />
               </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   required
@@ -83,6 +84,67 @@ function SignUpComponent() {
                   autoComplete="new-password"
                 />
               </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="mobile"
+                  label="Mobile Number"
+                  name="mobile"
+                  autoComplete="tel"
+                  type="tel"
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="dob"
+                  label="Date of Birth"
+                  name="dob"
+                  autoComplete="bday"
+                  type="date"
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="gender"
+                  label="Gender"
+                  name="gender"
+                  autoComplete="sex"
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="salary"
+                  label="Salary"
+                  name="salary"
+                  type="number"
+                  InputProps={{
+                    inputProps: { min: 0 } 
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="department"
+                  label="Department"
+                  name="department"
+                  autoComplete="organization"
+                />
+              </Grid>
+
               <Grid item xs={12}>
                 <Accordion>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -94,52 +156,107 @@ function SignUpComponent() {
                 <TextField
                   required
                   fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
+                  id="streetAddress"
+                  label="Street Address"
+                  name="streetAddress"
+                  autoComplete="street-address"
                 />
                 <br/>
                 {/* <Grid item xs={12}> */}
                 <TextField
                   required
                   fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
+                  id="city"
+                  label="City"
+                  name="city"
+                  autoComplete="address-level2"
                 />
+
+                <TextField
+                  required
+                  fullWidth
+                  id="state"
+                  label="State"
+                  name="state"
+                  autoComplete="address-level1"
+                />
+
+                <TextField
+                  required
+                  fullWidth
+                  id="postalCode"
+                  label="Postal Code"
+                  name="postalCode"
+                  autoComplete="postal-code"
+                />
+
+                <TextField
+                  required
+                  fullWidth
+                  id="country"
+                  label="Country"
+                  name="country"
+                  autoComplete="country"
+                />      
                   </AccordionDetails>
                 </Accordion>
+
                 <Accordion>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    Address
+                    Employement Details
                     
                   </AccordionSummary>
                   <AccordionDetails>
                     {/* <Grid item xs={12}> */}
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-                <br/>
-                {/* <Grid item xs={12}> */}
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
+                    <TextField
+                      required
+                      fullWidth
+                      id="jobTitle"
+                      label="Job Title"
+                      name="jobTitle"
+                      autoComplete="organization-title"
+                    />
+                    <br/>
+                    {/* <Grid item xs={12}> */}
+                      <TextField
+                        required
+                        fullWidth
+                        id="department"
+                        label="Department"
+                        name="department"
+                        autoComplete="organization"
+                      />
+
+                      <TextField
+                        required
+                        fullWidth
+                        id="manager"
+                        label="Manager"
+                        name="manager"
+                        autoComplete="organization"
+                      />
+
+                      <TextField
+                        required
+                        fullWidth
+                        id="startDate"
+                        label="Start Date"
+                        name="startDate"
+                        type="date"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+
+                      <TextField
+                        required
+                        fullWidth
+                        id="employmentStatus"
+                        label="Employment Status"
+                        name="employmentStatus"
+                        autoComplete="organization-role"
+                      />
+
                   </AccordionDetails>
                 </Accordion>
               </Grid>
