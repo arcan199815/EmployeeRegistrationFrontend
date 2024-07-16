@@ -16,14 +16,16 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import SignInComponent from './Component/SignInComponent';
 import SignUpComponent from './Component/SignUpComponent';
+import Layout from './Component/Layout'
 
 function App() {
 
   const defaultTheme = createTheme();
   return (
     <>
-    <SignInComponent/>
-    <SignUpComponent/>
+    {/* <SignInComponent/>
+    <SignUpComponent/> */}
+    <Layout/>
     </>
   );
 }

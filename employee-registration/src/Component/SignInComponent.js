@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Avatar from '@mui/material/Avatar';
@@ -14,10 +14,14 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import './css/SignInComponent.css';
+import backgroundImage from '../static/images/employee.png';
 
 function SignInComponent() {
 
+  debugger;
     const defaultTheme = createTheme();
+    const [isImageLoaded, setIsImageLoaded] = useState();
     return (
       <>
       <ThemeProvider 
@@ -25,18 +29,22 @@ function SignInComponent() {
       >
         <Grid container component="main" sx={{ height: '100vh' }}>
           <CssBaseline />
+          
           <Grid
             item
             xs={false}
             sm={4}
             md={7}
+            className="bg-image"
             sx={{
-              // backgroundImage:
-              //   'url("../../static/images/signin-image.png")',
+              backgroundImage: `url(${backgroundImage})`,
               backgroundColor: (t) =>
-                t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+                t.palette.mode === 'light' ? t.palette.grey[500] : t.palette.grey[900],
               backgroundSize: 'cover',
-              backgroundPosition: 'left',
+              backgroundPosition: 'center',
+              height: '100%',
+              transition: 'backgroundImage 2.5s ease-in-out', // Transition property
+              //opacity: isImageLoaded ? 1 : 0, // Fade in effect
             }}
           />
           <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>

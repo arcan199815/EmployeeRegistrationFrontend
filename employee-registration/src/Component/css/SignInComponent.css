@@ -1,0 +1,6 @@
+.bg-image {
+    background-image: url('../../static/images/signin-image.png');
+    background-size: cover;
+    background-position: left;
+    height: 100vh; /* Adjust height as needed */
+  }

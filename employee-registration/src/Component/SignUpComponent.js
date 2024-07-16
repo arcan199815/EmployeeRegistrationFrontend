@@ -44,11 +44,11 @@ function SignUpComponent() {
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="employeeName"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id="employeeName"
+                  label="Employee Name"
                   autoFocus
                 />
               </Grid>
@@ -102,7 +102,7 @@ function SignUpComponent() {
                   required
                   fullWidth
                   id="dob"
-                  label="Date of Birth"
+                  //label="Date of Birth"
                   name="dob"
                   autoComplete="bday"
                   type="date"
@@ -146,13 +146,15 @@ function SignUpComponent() {
               </Grid>
 
               <Grid item xs={12}>
+              <Grid container spacing={2}>
+              <Grid item xs={12}>
                 <Accordion>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     Address
-                    
                   </AccordionSummary>
                   <AccordionDetails>
-                    {/* <Grid item xs={12}> */}
+                  <Grid container spacing={2}> {/* Adjust spacing as needed */}
+                    <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -161,8 +163,9 @@ function SignUpComponent() {
                   name="streetAddress"
                   autoComplete="street-address"
                 />
+                </Grid>
                 <br/>
-                {/* <Grid item xs={12}> */}
+                <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -171,7 +174,8 @@ function SignUpComponent() {
                   name="city"
                   autoComplete="address-level2"
                 />
-
+                </Grid>
+                <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -180,7 +184,9 @@ function SignUpComponent() {
                   name="state"
                   autoComplete="address-level1"
                 />
+                </Grid>
 
+                <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -189,7 +195,8 @@ function SignUpComponent() {
                   name="postalCode"
                   autoComplete="postal-code"
                 />
-
+                </Grid>
+                <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -197,16 +204,22 @@ function SignUpComponent() {
                   label="Country"
                   name="country"
                   autoComplete="country"
-                />      
+                /> 
+                </Grid>
+                </Grid>     
                   </AccordionDetails>
                 </Accordion>
 
+                </Grid>
+                <Grid item xs={12}>
                 <Accordion>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     Employement Details
                     
                   </AccordionSummary>
                   <AccordionDetails>
+                  <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
                     {/* <Grid item xs={12}> */}
                     <TextField
                       required
@@ -216,8 +229,9 @@ function SignUpComponent() {
                       name="jobTitle"
                       autoComplete="organization-title"
                     />
+                    </Grid>
                     <br/>
-                    {/* <Grid item xs={12}> */}
+                    <Grid item xs={12} sm={6}>
                       <TextField
                         required
                         fullWidth
@@ -226,7 +240,8 @@ function SignUpComponent() {
                         name="department"
                         autoComplete="organization"
                       />
-
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
                       <TextField
                         required
                         fullWidth
@@ -235,7 +250,8 @@ function SignUpComponent() {
                         name="manager"
                         autoComplete="organization"
                       />
-
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
                       <TextField
                         required
                         fullWidth
@@ -247,7 +263,8 @@ function SignUpComponent() {
                           shrink: true,
                         }}
                       />
-
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
                       <TextField
                         required
                         fullWidth
@@ -256,16 +273,19 @@ function SignUpComponent() {
                         name="employmentStatus"
                         autoComplete="organization-role"
                       />
-
+                      </Grid>
+                    </Grid>
                   </AccordionDetails>
                 </Accordion>
+                </Grid>
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}
                   label="I want to receive inspiration, marketing promotions and updates via email."
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
             <Button
               type="submit"
@@ -273,7 +293,7 @@ function SignUpComponent() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              Register
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>

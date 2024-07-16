@@ -1,0 +1,56 @@
+.Layout {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    color: #000133;
+  }
+  
+  .header,
+.footer {
+  display: flex;
+  background: #813772;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  color: #090305;
+}
+
+.icon {
+  padding: 10px;
+}
+
+.icon:hover {
+  cursor: pointer;
+}
+
+.header-title {
+  margin: auto;
+}
+  
+  .container {
+    display: flex;
+    flex: 1;
+    color: #813772;
+  }
+  
+  .drawer {
+    background: #0c0c0c;
+    width: 0px;
+    transition: width 0.7s;
+    color: #813772;
+  }
+  
+  .opened {
+    width: 240px;
+  }
+  
+  .main {
+    flex: 1;
+    background: #f7f5f5;
+  }
+
+  .grid-container {
+    display: grid;
+    row-gap: 50px;
+  }
