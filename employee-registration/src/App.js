@@ -1,32 +1,36 @@
 import React from 'react';
-import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import SignInComponent from './Component/SignInComponent';
 import SignUpComponent from './Component/SignUpComponent';
-import Layout from './Component/Layout'
+import Layout from './Component/Layout';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import PrivateRoute from './Component/PrivateRoute';
+import { AuthProvider, useAuth } from './Component/AuthContext';
+import SignUpUserComponent from './Component/SignUpUserComponent';
+import NotFoundPage from './Component/NotFoundPage ';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
-
-  const defaultTheme = createTheme();
+  debugger;
+  const { isLoggedIn } = useAuth();
   return (
     <>
-    {/* <SignInComponent/>
-    <SignUpComponent/> */}
-    <Layout/>
-    </>
+    {/* <AuthProvider> */}
+    <Router>
+      <Routes>
+        <Route exact path="/" element={<SignInComponent />} />
+        <Route path="/signupemployee" element={<SignUpComponent />} />
+        <Route path="/signupuser" element={<SignUpUserComponent />} />
+        <Route path="/layout" element={isLoggedIn ? <Layout /> : <Navigate to="/notfoundpage" replace />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </Router>
+     {/* </AuthProvider> */}
+     {/* {!isLoggedIn && <Router>
+      <Routes>
+        <Route path="/notfoundpage" element={<NotFoundPage />}/>
+      </Routes>
+     </Router>} */}
+     </>
   );
 }
 

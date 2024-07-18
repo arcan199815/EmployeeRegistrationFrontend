@@ -42,13 +42,19 @@ function Layout() {
     <div className="header-title">Header</div>
     </div>
       <div className="container">
-        <aside className={`${isOpened ? "opened" : ""} drawer`}>Drawer</aside>
+        <aside className={`${isOpened ? "opened" : ""} drawer`}>
+        <Grid item xs={12}>
+        <Paper style={{ padding: '1rem', textAlign: 'center', background: '#0c0c0c' }}>
+          <Typography variant="h6" color='#813772'>Menu</Typography>
+        </Paper>
+      </Grid>
+        </aside>
         <main className="main">
         <Grid container spacing={2}>
       {/* Table Header */}
       <Grid item xs={12}>
         <Paper style={{ padding: '1rem', textAlign: 'center' }}>
-          <Typography variant="h6">Table Header</Typography>
+          <Typography variant="h6">Employees</Typography>
         </Paper>
       </Grid>
       </Grid>
@@ -56,10 +62,13 @@ function Layout() {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Age</TableCell>
-            <TableCell>City</TableCell>
+            <TableCell>Action</TableCell>
+            <TableCell>Emp Name</TableCell>
+            <TableCell>Emp Id</TableCell>
+            <TableCell>EmailId</TableCell>
+            <TableCell>Mobile Number</TableCell>
+            <TableCell>DOB</TableCell>
+            <TableCell>Gender</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
