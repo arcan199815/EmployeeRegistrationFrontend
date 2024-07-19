@@ -18,16 +18,26 @@ import { useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import './css/Layout.css';
+import { useAuth } from './AuthContext';
+
 
 function SignUpComponent() {
   const [isOpened, setIsOpened] = useState(true);
   const navigate = useNavigate();
+  const { logout } = useAuth();
+
 
   const navigateToEmployeeRegistration = () => {
     navigate('/signupemployee');}
 
     const navigateToEmployeeDashboard = () => {
       navigate('/layout');}
+
+    const navigateLogout = async () => {
+      debugger;
+      await logout();
+      navigate('/');
+    }
 
   const defaultTheme = createTheme();
   return (
@@ -57,7 +67,7 @@ function SignUpComponent() {
         </Paper>
       </Grid>
       <Grid item xs={12}>
-      <Paper style={{ padding: '1rem', textAlign: 'center', background: '#adaaaa', cursor: 'pointer' }} onClick={navigateToEmployeeRegistration}>
+      <Paper style={{ padding: '1rem', textAlign: 'center', background: '#adaaaa', cursor: 'pointer' }} onClick={navigateLogout}>
           <Typography variant="h14" color='#090305' fontFamily=' "Playwrite CU", cursive;'>Logout</Typography>
         </Paper>
       </Grid>
