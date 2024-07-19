@@ -52,7 +52,7 @@ function Layout() {
     navigate('/');
   }
 
-  const editEmployee = 
+  //const editEmployee = 
 
   const deleteData = async (employee) => {
     try {
