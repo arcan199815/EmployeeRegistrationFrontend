@@ -20,8 +20,17 @@ const fetchEmployeeRegistration = async (searchKeyword) => {
     }
   };
 
+const deleteEmployee = (id) => {
+return axios
+    .post(API_URL + "EmployeeRegistration/Delete", id)
+};
+
+
+
   const EmployeeRegistrationService = {
     fetchEmployeeRegistration,
+    deleteEmployee,
+    
   }
 
 export default EmployeeRegistrationService;    

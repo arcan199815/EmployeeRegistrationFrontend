@@ -26,7 +26,6 @@ function SignUpComponent() {
   const navigate = useNavigate();
   const { logout } = useAuth();
 
-
   const navigateToEmployeeRegistration = () => {
     navigate('/signupemployee');}
 

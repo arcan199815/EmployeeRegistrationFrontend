@@ -35,6 +35,7 @@ function Layout() {
     const [searchKeyword, setSearchKeyword] = useState(null);
     const [employee, setEmployee] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
+    const [Id, setId] = useState(0);
     const navigate = useNavigate();
     const { logout } = useAuth();
 
@@ -51,6 +52,17 @@ function Layout() {
     navigate('/');
   }
 
+  const editEmployee = 
+
+  const deleteData = async (employee) => {
+    try {
+      await EmployeeRegistrationService.deleteEmployee(employee.iemployeeRegistrationId);
+      console.log('Records Deleted successfully');
+    } catch (error) {
+      console.log('Something went wrong',error);
+    }
+  }
+
     const fetchData = async () => {
       try {
         debugger;
@@ -59,11 +71,8 @@ function Layout() {
         setEmployee(data.employees);
         setTotalCount(data.totalCount);
 
-        // Process or set state with fetched data
       } catch (error) {
-        // Handle error
         console.error('Error fetching employee registration:', error);
-        // Optionally display an error message to the user
       }
     };
 
@@ -129,7 +138,7 @@ function Layout() {
           {employee.map((row) => (
             <TableRow key={row.id}>
               <TableCell><EditIcon style={{ cursor: 'pointer', marginRight: '10px', fontSize: '20px' }} />
-              <DeleteIcon style={{ cursor: 'pointer' , fontSize: '20px' }} /></TableCell>
+              <DeleteIcon style={{ cursor: 'pointer' , fontSize: '20px' }} onClick={() => deleteData(employee)} /></TableCell>
               <TableCell>{row.vempName}</TableCell>
               <TableCell>{row.iempId}</TableCell>
               <TableCell>{row.vempEmailId}</TableCell>
