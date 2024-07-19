@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SignInComponent from './Component/SignInComponent';
 import SignUpComponent from './Component/SignUpComponent';
 import Layout from './Component/Layout';
@@ -12,6 +12,15 @@ import { ToastContainer } from 'react-toastify';
 function App() {
   debugger;
   const { isLoggedIn } = useAuth();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(false); // Set loading to false once initialization is done
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>; // Show loading indicator until initialization completes
+  }
   return (
     <>
     {/* <AuthProvider> */}

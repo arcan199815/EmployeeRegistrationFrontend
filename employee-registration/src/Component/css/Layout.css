@@ -9,7 +9,7 @@
   .header,
 .footer {
   display: flex;
-  background: #813772;
+  background: #2ba4ef;
   height: 50px;
   align-items: center;
   justify-content: center;
@@ -26,6 +26,10 @@
 
 .header-title {
   margin: auto;
+  font-family: "Playwrite CU", cursive;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: oblique;
 }
   
   .container {
@@ -35,7 +39,7 @@
   }
   
   .drawer {
-    background: #0c0c0c;
+    background: #adaaaa;
     width: 0px;
     transition: width 0.7s;
     color: #813772;

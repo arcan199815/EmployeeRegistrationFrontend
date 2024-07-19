@@ -1,5 +1,5 @@
-import React from 'react';
-import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import React, { useState } from 'react';
+import { Accordion, AccordionSummary, AccordionDetails, Paper } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -14,13 +14,56 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import './css/Layout.css';
 
 function SignUpComponent() {
+  const [isOpened, setIsOpened] = useState(true);
+  const navigate = useNavigate();
+
+  const navigateToEmployeeRegistration = () => {
+    navigate('/signupemployee');}
+
+    const navigateToEmployeeDashboard = () => {
+      navigate('/layout');}
 
   const defaultTheme = createTheme();
   return (
     <>
-    <ThemeProvider theme={defaultTheme}>
+    <div className="Layout">
+      <div className="header">
+    <div className="icon" onClick={() => setIsOpened(!isOpened)}>
+        {isOpened ? <ChevronLeftIcon /> : <MenuIcon />}
+    </div>
+    <div className="header-title">Employee Registration</div>
+    </div>
+      <div className="container">
+        <aside className={`${isOpened ? "opened" : ""} drawer`}>
+        <Grid item xs={12}>
+        <Paper style={{ padding: '1rem', textAlign: 'center', background: '#adaaaa' }}>
+          <Typography variant="h12" color='#090305' fontFamily=' "Playwrite CU", cursive;'>Menu</Typography>
+        </Paper>
+      </Grid>
+      <Grid item xs={12}>
+      <Paper style={{ padding: '1rem', textAlign: 'center', background: '#adaaaa', cursor: 'pointer' }} onClick={navigateToEmployeeDashboard}>
+          <Typography variant="h14" color='#090305' fontFamily=' "Playwrite CU", cursive;'>Employee Dashboard</Typography>
+        </Paper>
+      </Grid>
+      <Grid item xs={12}>
+      <Paper style={{ padding: '1rem', textAlign: 'center', background: '#adaaaa', cursor: 'pointer' }} onClick={navigateToEmployeeRegistration}>
+          <Typography variant="h14" color='#090305' fontFamily=' "Playwrite CU", cursive;'>Employee Registration</Typography>
+        </Paper>
+      </Grid>
+      <Grid item xs={12}>
+      <Paper style={{ padding: '1rem', textAlign: 'center', background: '#adaaaa', cursor: 'pointer' }} onClick={navigateToEmployeeRegistration}>
+          <Typography variant="h14" color='#090305' fontFamily=' "Playwrite CU", cursive;'>Logout</Typography>
+        </Paper>
+      </Grid>
+        </aside>
+        <main className="main">
+        <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="sm">
         <CssBaseline />
         <Box
@@ -84,8 +127,16 @@ function SignUpComponent() {
                   autoComplete="new-password"
                 />
               </Grid>
-
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
+              <Grid container spacing={2}>
+              <Grid item xs={12}>
+              <Accordion>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    Personal Information
+                  </AccordionSummary>
+                  <AccordionDetails>
+                  <Grid container spacing={2}>
+              <Grid item xs={12} >
                 <TextField
                   required
                   fullWidth
@@ -96,7 +147,6 @@ function SignUpComponent() {
                   type="tel"
                 />
               </Grid>
-
               <Grid item xs={12} sm={6}>
                 <TextField
                   required
@@ -144,9 +194,10 @@ function SignUpComponent() {
                   autoComplete="organization"
                 />
               </Grid>
-
-              <Grid item xs={12}>
-              <Grid container spacing={2}>
+              </Grid>
+              </AccordionDetails>
+              </Accordion>
+              </Grid>
               <Grid item xs={12}>
                 <Accordion>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -306,7 +357,12 @@ function SignUpComponent() {
         </Box>
       </Container>
     </ThemeProvider>
+        </main>
+      </div>
+      <div className="footer">Footer</div>
+    </div>
     </>
+    
   );
 }
 

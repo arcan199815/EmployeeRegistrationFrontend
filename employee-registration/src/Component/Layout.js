@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Avatar from '@mui/material/Avatar';
@@ -24,14 +24,45 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import EmployeeRegistrationService from '../Services/EmployeeRegistrationService';
+import EditIcon from '@mui/icons-material/Edit'; // Import EditIcon from Material-UI
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useNavigate } from 'react-router-dom';
 
 function Layout() {
-    const [isOpened, setIsOpened] = useState(false);
-    const rows = [
-        { id: 1, name: 'John Doe', age: 25, city: 'New York' },
-        { id: 2, name: 'Jane Smith', age: 30, city: 'Los Angeles' },
-        { id: 3, name: 'Mike Johnson', age: 35, city: 'Chicago' },
-      ];
+    const [isOpened, setIsOpened] = useState(true);
+    const [searchKeyword, setSearchKeyword] = useState(null);
+    const [employee, setEmployee] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const navigate = useNavigate();
+
+    const navigateToEmployeeRegistration = () => {
+      navigate('/signupemployee');
+  };
+
+  const navigateToEmployeeDashboard = () => {
+    navigate('/layout');}
+
+    const fetchData = async () => {
+      try {
+        debugger;
+        const data = await EmployeeRegistrationService.fetchEmployeeRegistration(searchKeyword);
+        console.log('Fetched employee registration:', data);
+        setEmployee(data.employees);
+        setTotalCount(data.totalCount);
+
+        // Process or set state with fetched data
+      } catch (error) {
+        // Handle error
+        console.error('Error fetching employee registration:', error);
+        // Optionally display an error message to the user
+      }
+    };
+
+    useEffect(() => {
+      fetchData();
+    }, []);
+      
   return (
     <>
     <div className="Layout">
@@ -39,13 +70,28 @@ function Layout() {
     <div className="icon" onClick={() => setIsOpened(!isOpened)}>
         {isOpened ? <ChevronLeftIcon /> : <MenuIcon />}
     </div>
-    <div className="header-title">Header</div>
+    <div className="header-title">Employee Dashboard</div>
     </div>
       <div className="container">
         <aside className={`${isOpened ? "opened" : ""} drawer`}>
         <Grid item xs={12}>
-        <Paper style={{ padding: '1rem', textAlign: 'center', background: '#0c0c0c' }}>
-          <Typography variant="h6" color='#813772'>Menu</Typography>
+        <Paper style={{ padding: '1rem', textAlign: 'center', background: '#adaaaa' }}>
+          <Typography variant="h12" color='#090305' fontFamily=' "Playwrite CU", cursive;'>Menu</Typography>
+        </Paper>
+      </Grid>
+      <Grid item xs={12}>
+      <Paper style={{ padding: '1rem', textAlign: 'center', background: '#adaaaa', cursor: 'pointer' }} onClick={navigateToEmployeeDashboard}>
+          <Typography variant="h14" color='#090305' fontFamily=' "Playwrite CU", cursive;'>Employee Dashboard</Typography>
+        </Paper>
+      </Grid>
+      <Grid item xs={12}>
+      <Paper style={{ padding: '1rem', textAlign: 'center', background: '#adaaaa', cursor: 'pointer' }} onClick={navigateToEmployeeRegistration}>
+          <Typography variant="h14" color='#090305' fontFamily=' "Playwrite CU", cursive;'>Employee Registration</Typography>
+        </Paper>
+      </Grid>
+      <Grid item xs={12}>
+      <Paper style={{ padding: '1rem', textAlign: 'center', background: '#adaaaa', cursor: 'pointer' }} onClick={navigateToEmployeeRegistration}>
+          <Typography variant="h14" color='#090305' fontFamily=' "Playwrite CU", cursive;'>Logout</Typography>
         </Paper>
       </Grid>
         </aside>
@@ -54,37 +100,40 @@ function Layout() {
       {/* Table Header */}
       <Grid item xs={12}>
         <Paper style={{ padding: '1rem', textAlign: 'center' }}>
-          <Typography variant="h6">Employees</Typography>
+          <Typography variant="h12" fontFamily=' "Playwrite CU", cursive;'>Employees</Typography>
         </Paper>
       </Grid>
       </Grid>
-        <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Action</TableCell>
-            <TableCell>Emp Name</TableCell>
-            <TableCell>Emp Id</TableCell>
-            <TableCell>EmailId</TableCell>
-            <TableCell>Mobile Number</TableCell>
-            <TableCell>DOB</TableCell>
-            <TableCell>Gender</TableCell>
+        <TableContainer component={Paper} fontFamily=' "Playwrite CU", cursive;'>
+      <Table style={{ fontFamily: '"Playwrite CU", cursive' }}>
+        <TableHead > 
+          <TableRow >
+            <TableCell >Action</TableCell>
+            <TableCell >Emp Name</TableCell>
+            <TableCell >Emp Id</TableCell>
+            <TableCell >EmailId</TableCell>
+            <TableCell >Mobile Number</TableCell>
+            <TableCell >DOB</TableCell>
+            <TableCell >Gender</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {employee.map((row) => (
             <TableRow key={row.id}>
-              <TableCell>{row.id}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.age}</TableCell>
-              <TableCell>{row.city}</TableCell>
+              <TableCell><EditIcon style={{ cursor: 'pointer', marginRight: '10px', fontSize: '20px' }} />
+              <DeleteIcon style={{ cursor: 'pointer' , fontSize: '20px' }} /></TableCell>
+              <TableCell>{row.vempName}</TableCell>
+              <TableCell>{row.iempId}</TableCell>
+              <TableCell>{row.vempEmailId}</TableCell>
+              <TableCell>{row.vemployeeMobileNumber}</TableCell>
+              <TableCell>{row.vdob}</TableCell>
+              <TableCell>{row.vgender}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </TableContainer>
         </main>
-        
       </div>
       <div className="footer">Footer</div>
     </div>

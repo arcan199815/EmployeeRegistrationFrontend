@@ -15,7 +15,9 @@ const requestData = {
 
 export const AuthProvider = ({ children }) => {
   debugger;
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem('isLoggedIn') === 'true';
+  });
   //setIsLoggedIn(isLoggedInUser);
   const [user, setUser] = useState(null);
 
@@ -33,6 +35,7 @@ export const AuthProvider = ({ children }) => {
       .then((response) => {
         if (response.data.token) {
           localStorage.setItem("user", JSON.stringify(response.data));
+          localStorage.setItem('isLoggedIn', 'true');
           setIsLoggedIn(true);
           setUser(response.data);
         }
@@ -45,6 +48,7 @@ export const AuthProvider = ({ children }) => {
     // Implement your logout logic here
     setIsLoggedIn(false);
     localStorage.removeItem("user");
+    localStorage.removeItem('isLoggedIn');
     setUser(null);
     // return axios.post(API_URL + "signout").then((response) => {
     //   return response.data;
