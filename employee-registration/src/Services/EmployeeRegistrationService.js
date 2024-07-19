@@ -84,12 +84,8 @@ return axios
 
   const EmployeeRegistrationService = {
     fetchEmployeeRegistration,
-<<<<<<< HEAD
     deleteEmployee,
-    
-=======
     register,
->>>>>>> c892667f5ac6cebc4dcfee5e9cb0469119018ebe
   }
 
 export default EmployeeRegistrationService;    
