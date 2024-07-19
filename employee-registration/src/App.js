@@ -27,7 +27,7 @@ function App() {
     <Router>
       <Routes>
         <Route exact path="/" element={<SignInComponent />} />
-        <Route path="/signupemployee" element={<SignUpComponent />} />
+        <Route path="/signupemployee" element={isLoggedIn ?<SignUpComponent />: <Navigate to="/notfoundpage" replace />} />
         <Route path="/signupuser" element={<SignUpUserComponent />} />
         <Route path="/layout" element={isLoggedIn ? <Layout /> : <Navigate to="/notfoundpage" replace />} />
         <Route path="*" element={<NotFoundPage />} />

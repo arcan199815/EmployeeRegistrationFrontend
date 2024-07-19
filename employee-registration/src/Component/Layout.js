@@ -28,6 +28,7 @@ import EmployeeRegistrationService from '../Services/EmployeeRegistrationService
 import EditIcon from '@mui/icons-material/Edit'; // Import EditIcon from Material-UI
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 
 function Layout() {
     const [isOpened, setIsOpened] = useState(true);
@@ -35,6 +36,7 @@ function Layout() {
     const [employee, setEmployee] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const navigate = useNavigate();
+    const { logout } = useAuth();
 
     const navigateToEmployeeRegistration = () => {
       navigate('/signupemployee');
@@ -42,6 +44,12 @@ function Layout() {
 
   const navigateToEmployeeDashboard = () => {
     navigate('/layout');}
+
+  const navigateLogout = async () => {
+    debugger;
+    await logout();
+    navigate('/');
+  }
 
     const fetchData = async () => {
       try {
@@ -90,7 +98,7 @@ function Layout() {
         </Paper>
       </Grid>
       <Grid item xs={12}>
-      <Paper style={{ padding: '1rem', textAlign: 'center', background: '#adaaaa', cursor: 'pointer' }} onClick={navigateToEmployeeRegistration}>
+      <Paper style={{ padding: '1rem', textAlign: 'center', background: '#adaaaa', cursor: 'pointer' }} onClick={navigateLogout}>
           <Typography variant="h14" color='#090305' fontFamily=' "Playwrite CU", cursive;'>Logout</Typography>
         </Paper>
       </Grid>
