@@ -6,7 +6,7 @@ const ToastSuccessPopup = ({ message }) => {
   const notify = () => {
     toast.success(message, {
       //position: toast.POSITION.TOP_CENTER,
-      autoClose: 3000, // Auto close the notification after 3 seconds
+      autoClose: 5000, // Auto close the notification after 3 seconds
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -16,6 +16,7 @@ const ToastSuccessPopup = ({ message }) => {
 
   // Call notify function when the component mounts
   React.useEffect(() => {
+    debugger;
     notify();
   }, []);
 

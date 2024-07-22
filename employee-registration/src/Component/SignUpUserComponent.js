@@ -17,7 +17,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthService from '../Services/AuthService'
 import ToastErrorPopup from './ToasterComponent/ToastErrorPopupComponent'; // Adjust path as necessary
 import ToastSuccessPopup from './ToasterComponent/ToastSuccessPopupComponent'; // Adjust path as necessary
-import { ToastContainer } from 'react-toastify';
+import {toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -44,29 +44,29 @@ function SignUpUserComponent() {
   const handleSubmit = async (event) => {
     debugger;
     event.preventDefault();
-    if(formData.username ==null || formData.username == undefined)
+    if(formData.username ==null || formData.username == undefined || formData.username =="")
     {
-        <ToastErrorPopup message="User Name Required" />;
+        toast.error("User Name Required");
         return;
     }
-    if(formData.email ==null || formData.email == undefined)
+    if(formData.email ==null || formData.email == undefined || formData.email =="")
     {
-        <ToastErrorPopup message="Email Required" />;
+        toast.error("Email Required");
         return;
     }
-    if(formData.password ==null || formData.password == undefined)
+    if(formData.password ==null || formData.password == undefined || formData.password =="")
     {
-        <ToastErrorPopup message="Password Required" />;
+        toast.error("Password Required");
         return;
     }
     if (!validatePassword(formData.password))
     {
-        <ToastErrorPopup message="Password should be atleast 8 characters long with one capital letter, one small letter, one number and one special characters" />;
+        toast.error("Password should be atleast 8 characters long with one capital letter, one small letter, one number and one special characters");
         return;
     }
     if(confirmpassword != formData.password)
     {
-        <ToastErrorPopup message="Password Didnot Match" />;
+        toast.error("Password Didnot Match");
         return;
     }
 
@@ -75,14 +75,19 @@ function SignUpUserComponent() {
         debugger;
         if (userData.data.token) {
           //login(); 
-          <ToastSuccessPopup message="User Registered successfully"/>
-          navigate('/layout'); 
+          toast.success("User Registered successfully",{
+            autoClose: 5000, // 5000 milliseconds = 5 seconds
+          })
+          setTimeout(() => {
+            navigate('/');
+          }, 5000); 
         } else {
           //setError('Invalid username or password');
-          <ToastErrorPopup message="Password should be atleast 8 characters long with one capital letter, one small letter, one number and one special characters" />;
+          toast.error("Invalid username or password");
         }
       } catch (error) {
         console.error('Login error:',error);
+        toast.error("Login failed. Please try again.");
         //setError('Login failed. Please try again.');
       } finally {
         setLoading(false);

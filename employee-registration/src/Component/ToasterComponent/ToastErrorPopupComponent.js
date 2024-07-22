@@ -16,6 +16,7 @@ const ToastErrorPopup = ({ message }) => {
 
   // Call notify function when the component mounts
   React.useEffect(() => {
+    debugger;
     notify();
   }, []);
 

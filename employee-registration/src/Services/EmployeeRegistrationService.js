@@ -62,7 +62,7 @@ const fetchEmployeeRegistration = async (searchKeyword) => {
         debugger;
       const response = await axios.get(`${API_URL}EmployeeRegistration`, {
         params: {
-          pageSize: 10,
+          pageSize: 100,
           pageNumber: 1,
           searchKeyword: searchKeyword
         }
@@ -75,9 +75,24 @@ const fetchEmployeeRegistration = async (searchKeyword) => {
     }
   };
 
+  const fetchEmployeeRegistrationById = async (id) => {
+    try {
+        debugger;
+      const response = await axios.get(`${API_URL}EmployeeRegistration/GetById?id=${id}`, {
+        
+      });
+      return response.data;
+    } catch (error) {
+      // Handle error
+      console.error('Error fetching employee registration:', error);
+      throw error; // Optionally rethrow or handle as needed
+    }
+  };
+
 const deleteEmployee = (id) => {
+    debugger;
 return axios
-    .post(API_URL + "EmployeeRegistration/Delete", id)
+    .post(`${API_URL}EmployeeRegistration/Delete?id=${id}`)
 };
 
 
@@ -86,6 +101,7 @@ return axios
     fetchEmployeeRegistration,
     deleteEmployee,
     register,
+    fetchEmployeeRegistrationById,
   }
 
 export default EmployeeRegistrationService;    

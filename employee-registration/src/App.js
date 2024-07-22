@@ -24,6 +24,7 @@ function App() {
   return (
     <>
     {/* <AuthProvider> */}
+    <ToastContainer />
     <Router>
       <Routes>
         <Route exact path="/" element={<SignInComponent />} />

@@ -20,7 +20,7 @@ import { useAuth } from './AuthContext';
 import { useHistory, useNavigate } from 'react-router-dom';
 import ToastErrorPopup from './ToasterComponent/ToastErrorPopupComponent'; // Adjust path as necessary
 import ToastSuccessPopup from './ToasterComponent/ToastSuccessPopupComponent'; // Adjust path as necessary
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function SignInComponent() {
@@ -60,19 +60,19 @@ function SignInComponent() {
     //     <ToastErrorPopup message="User Name Required" />;
     //     return;
     // }
-    if(formData.email ==null || formData.email == undefined)
+    if(formData.email ==null || formData.email == undefined|| formData.email=="")
     {
-        <ToastErrorPopup message="Email Required" />;
+      setError("Email Required");
         return;
     }
-    if(formData.password ==null || formData.password == undefined)
+    if(formData.password ==null || formData.password == undefined||formData.password=="")
     {
-        <ToastErrorPopup message="Password Required" />;
+      setError("Password Required");
         return;
     }
     if (!validatePassword(formData.password))
     {
-        <ToastErrorPopup message="Password should be atleast 8 characters long with one capital letter, one small letter, one number and one special characters" />;
+      setError("Password should be atleast 8 characters long with one capital letter, one small letter, one number and one special characters");
         return;
     }
   
@@ -82,7 +82,8 @@ function SignInComponent() {
         debugger;
         if (userData.token) {
           login(); 
-          navigate('/layout'); 
+          //toast.success("Happy surfing!!")
+            navigate('/layout');
         } else {
           setError('Invalid username or password');
         }

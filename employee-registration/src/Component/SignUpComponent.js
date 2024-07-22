@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Accordion, AccordionSummary, AccordionDetails, Paper } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Avatar from '@mui/material/Avatar';
@@ -16,19 +16,26 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import './css/Layout.css';
 import { useAuth } from './AuthContext';
-
+import { useLocation } from 'react-router-dom';
 import AuthService from '../Services/AuthService'
 import ToastErrorPopup from './ToasterComponent/ToastErrorPopupComponent'; // Adjust path as necessary
 import ToastSuccessPopup from './ToasterComponent/ToastSuccessPopupComponent'; // Adjust path as necessary
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from '@mui/material/Link';
 import EmployeeRegistrationService from '../Services/EmployeeRegistrationService';
+import LoadingIndicator from './LoadingIndicator';
 
 function SignUpComponent() {
   const [isOpened, setIsOpened] = useState(true);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const location = useLocation();
+  const { employees } = location.state|| {};
+  const [address, setAddress] = useState([]);
+  const [employmentDetails, setEmploymentDetails] = useState([]);
+  const [employee, setEmployee] = useState([]);
 
   const [formData, setFormData] = useState({
     employeeRegistrationID: 0,
@@ -52,108 +59,152 @@ function SignUpComponent() {
     manager: '',
     startDate: null,
     employmentStatus: ''
-  });  
+  });
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     debugger;
     // Check for required fields
     if (!formData.empName) {
-      <ToastErrorPopup message="Employee Name is required" />;
+      toast.error("Employee Name is required");
       return;
     }
     if (!formData.empEmailId) {
-      <ToastErrorPopup message="Email is required" />;
+      toast.error("Email is required");
       return;
     }
     if (!formData.empId) {
-      <ToastErrorPopup message="Employee ID is required" />;
+      toast.error("Employee ID is required");
       return;
     }
     if (!formData.employeeMobileNumber) {
-      <ToastErrorPopup message="Employee Mobile Number is required" />;
+      toast.error("Employee Mobile Number is required");
       return;
     }
     if (!formData.dob) {
-      <ToastErrorPopup message="Date of Birth is required" />;
+      toast.error("Date of Birth is required");
       return;
     }
     if (!formData.gender) {
-      <ToastErrorPopup message="Gender is required" />;
+      toast.error("Gender is required");
       return;
     }
     if (!formData.salary) {
-      <ToastErrorPopup message="Salary is required" />;
+      toast.error("Salary is required");
       return;
     }
     if (!formData.department) {
-      <ToastErrorPopup message="Department is required" />;
+      toast.error("Department is required");
       return;
     }
     if (!formData.streetAddress) {
-      <ToastErrorPopup message="Street Address is required" />;
+      toast.error("Street Address is required");
       return;
     }
     if (!formData.city) {
-      <ToastErrorPopup message="City is required" />;
+      toast.error("City is required");
       return;
     }
     if (!formData.state) {
-      <ToastErrorPopup message="State is required" />;
+      toast.error("State is required");
       return;
     }
     if (!formData.postalCode) {
-      <ToastErrorPopup message="Postal Code is required" />;
+      toast.error("Postal Code is required");
       return;
     }
     if (!formData.country) {
-      <ToastErrorPopup message="Country is required" />;
+      toast.error("Country is required");
       return;
     }
     if (!formData.jobTitle) {
-      <ToastErrorPopup message="Job Title is required" />;
+      toast.error("Job Title is required");
       return;
     }
     if (!formData.manager) {
-      <ToastErrorPopup message="Manager is required" />;
+      toast.error("Manager is required");
       return;
     }
     if (!formData.startDate) {
-      <ToastErrorPopup message="Start Date is required" />;
+      toast.error("Start Date is required");
       return;
     }
     if (!formData.employmentStatus) {
-      <ToastErrorPopup message="Employment Status is required" />;
+      toast.error("Employment Status is required");
       return;
     }
   
     // Example of additional validation, e.g., salary should be positive
     if (formData.salary <= 0) {
-      <ToastErrorPopup message="Salary should be a positive number" />;
+      toast.error("Salary should be a positive number");
       return;
     }
   
     // Example of additional validation for phone number (if necessary)
     if (!/^\d{10}$/.test(formData.employeeMobileNumber)) {
-      <ToastErrorPopup message="Employee Mobile Number should be 10 digits" />;
+      toast.error("Employee Mobile Number should be 10 digits");
       return;
     }
   
     try {
       // Call the register function from AuthService
+      setLoading(true);
       const userData = await EmployeeRegistrationService.register(formData);
       debugger;
       if (userData.data == true) {
-        <ToastSuccessPopup message="User Registered successfully" />;
-        navigate('/layout'); // Navigate to another route upon success
+        toast.success("Employee Registered successfully",{
+          autoClose: 5000, // 5000 milliseconds = 5 seconds
+        });
       } else {
-        <ToastErrorPopup message="Registration failed. Please try again." />;
+        toast.error("Registration failed. Please try again.");
       }
     } catch (error) {
       console.error('Registration error:', error);
-      <ToastErrorPopup message="An error occurred. Please try again." />;
+      toast.error("An error occurred. Please try again.");
     } finally {
+      setTimeout(() => {
+        navigate('/layout');
+      }, 5000); // Navigate to another route upon success
       setLoading(false); // Stop loading state
+    }
+  };
+
+  const fetchDataById = async () => {
+    debugger;
+    try {
+      debugger;
+      const data = await EmployeeRegistrationService.fetchEmployeeRegistrationById(employees.iemployeeRegistrationId);
+      console.log('Fetched employee registration:', data);
+      setAddress(data.address);
+      setEmploymentDetails(data.employmentDetails);
+      setEmployee(data);
+      setFormData(data);
+      debugger;
+      setFormData({
+        employeeRegistrationID: data.employeeRegistrationID,
+        empName: data.empName,
+        empId: data.empId,
+        empEmailId: data.empEmailId,
+        employeeMobileNumber: data.employeeMobileNumber,
+        dob: data.dob,
+        gender: data.gender,
+        salary: data.salary,
+        department: data.department,
+        addressId: data.addressId,
+        streetAddress: data.address.vstreetAddress,
+        city: data.address.vcity,
+        state: data.address.vstate,
+        postalCode: data.address.vpostalCode,
+        country: data.address.vcountry,
+        employmentDetailsId: data.employmentDetailsId,
+        jobTitle: data.employmentDetails.vjobTitle,
+        manager: data.employmentDetails.vmanager,
+        startDate: data.employmentDetails.startDate,
+        employmentStatus: data.employmentDetails.vemploymentStatus,
+      })
+    } catch (error) {
+      console.error('Error fetching employee registration:', error);
     }
   };
   
@@ -177,9 +228,27 @@ function SignUpComponent() {
       navigate('/');
     }
 
+    const formatDate = (date) => {
+      if (!date) return null;
+      return date.toISOString().split('T')[0];
+    };
+
+    useEffect(() => {
+      debugger;
+      setLoading(false);
+      if(employees){
+      fetchDataById(); // Set loading to false once initialization is done
+      }
+    }, []);
+  
+    if (loading) {
+      return <LoadingIndicator />;
+    }
+
   const defaultTheme = createTheme();
   return (
     <>
+    <ToastContainer />
     <div className="Layout">
       <div className="header">
     <div className="icon" onClick={() => setIsOpened(!isOpened)}>
@@ -239,7 +308,7 @@ function SignUpComponent() {
                   required
                   fullWidth
                   id="empName"
-                  value={formData.employeeName}
+                  value={formData.empName}
                   onChange={handleInputChange}
                   label="Employee Name"
                   autoFocus
@@ -290,6 +359,7 @@ function SignUpComponent() {
                   onChange={handleInputChange}
                   autoComplete="tel"
                   type="tel"
+                  inputProps={{ maxLength: 10 }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -303,6 +373,7 @@ function SignUpComponent() {
                   onChange={handleInputChange}
                   autoComplete="bday"
                   type="date"
+                  inputProps={{ max: formatDate(new Date()) }} 
                 />
               </Grid>
 
@@ -478,7 +549,7 @@ function SignUpComponent() {
                         id="startDate"
                         label="Start Date"
                         name="startDate"
-                        value={formData.startDate}
+                        value={formData.startDate ? formData.startDate.slice(0, 10) : ''}
                         onChange={handleInputChange}
                         type="date"
                         InputLabelProps={{
@@ -520,13 +591,6 @@ function SignUpComponent() {
             >
               Register
             </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
         </Box>
       </Container>

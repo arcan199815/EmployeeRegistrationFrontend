@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import { Accordion, AccordionSummary, AccordionDetails, TablePagination } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -32,12 +32,41 @@ import { useAuth } from './AuthContext';
 
 function Layout() {
     const [isOpened, setIsOpened] = useState(true);
-    const [searchKeyword, setSearchKeyword] = useState(null);
+    const [searchQuery, setSearchQuery] = useState(null);
     const [employee, setEmployee] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [Id, setId] = useState(0);
     const navigate = useNavigate();
     const { logout } = useAuth();
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+
+    const handleChangePage = (event, newPage) => {
+      debugger;
+      setPage(newPage);
+    };
+  
+    const handleChangeRowsPerPage = (event) => {
+      debugger;
+      const newRowsPerPage = parseInt(event.target.value, 10);
+      setRowsPerPage(newRowsPerPage);
+      setPage(0); // Reset to first page when rows per page changes
+
+
+      if (page * newRowsPerPage >= totalCount) {
+        setPage(Math.floor(totalCount / newRowsPerPage));
+      }
+    };
+
+    const handleSearchChange = (event) => {
+      setSearchQuery(event.target.value);
+      setPage(0); // Reset page when search query changes
+      fetchData();
+    };
+
+    // const filteredEmployees = employee.filter((row) =>
+    //   row.vempName.toLowerCase().includes(searchQuery.toLowerCase())
+    // );
 
     const navigateToEmployeeRegistration = () => {
       navigate('/signupemployee');
@@ -54,19 +83,25 @@ function Layout() {
 
   //const editEmployee = 
 
-  const deleteData = async (employee) => {
+  const deleteData = async (rowData) => {
+    debugger;
     try {
-      await EmployeeRegistrationService.deleteEmployee(employee.iemployeeRegistrationId);
+      await EmployeeRegistrationService.deleteEmployee(rowData.iemployeeRegistrationId);
       console.log('Records Deleted successfully');
+      window.location.reload();
     } catch (error) {
       console.log('Something went wrong',error);
     }
   }
 
+  const editData = async (rowData) => {
+    navigate('/signupemployee', { state: { employees: rowData } });
+  }
+
     const fetchData = async () => {
       try {
         debugger;
-        const data = await EmployeeRegistrationService.fetchEmployeeRegistration(searchKeyword);
+        const data = await EmployeeRegistrationService.fetchEmployeeRegistration(searchQuery);
         console.log('Fetched employee registration:', data);
         setEmployee(data.employees);
         setTotalCount(data.totalCount);
@@ -120,6 +155,16 @@ function Layout() {
           <Typography variant="h12" fontFamily=' "Playwrite CU", cursive;'>Employees</Typography>
         </Paper>
       </Grid>
+      <Grid item xs={12}>
+              <TextField
+                fullWidth
+                id="search"
+                label="Search Employee"
+                variant="outlined"
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+        </Grid>
       </Grid>
         <TableContainer component={Paper} fontFamily=' "Playwrite CU", cursive;'>
       <Table style={{ fontFamily: '"Playwrite CU", cursive' }}>
@@ -135,10 +180,13 @@ function Layout() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {employee.map((row) => (
+        {(rowsPerPage > 0
+            ? employee.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : employee).map((row) => (
             <TableRow key={row.id}>
-              <TableCell><EditIcon style={{ cursor: 'pointer', marginRight: '10px', fontSize: '20px' }} />
-              <DeleteIcon style={{ cursor: 'pointer' , fontSize: '20px' }} onClick={() => deleteData(employee)} /></TableCell>
+              <TableCell><span style={{ display: 'flex', alignItems: 'center' }}><EditIcon style={{ cursor: 'pointer', marginRight: '10px', fontSize: '20px' }} onClick={() => editData(row)} />
+              <DeleteIcon style={{ cursor: 'pointer' , fontSize: '20px' }} onClick={() => deleteData(row)} /> </span>
+              </TableCell> 
               <TableCell>{row.vempName}</TableCell>
               <TableCell>{row.iempId}</TableCell>
               <TableCell>{row.vempEmailId}</TableCell>
@@ -149,10 +197,25 @@ function Layout() {
           ))}
         </TableBody>
       </Table>
+      <TablePagination
+        rowsPerPageOptions={5} // Options for rows per page dropdown
+        component="div"
+        count={totalCount} // Total number of rows
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </TableContainer>
         </main>
       </div>
-      <div className="footer">Footer</div>
+      <div className="footer"><p >
+          &copy; {new Date().getFullYear()} XYZ Company. All rights reserved.
+        </p>
+        <br/>
+        <p >
+          Contact: contact@xyzcompany.com | Phone: +1 (123) 456-7890
+        </p></div>
     </div>
     </>
   );
