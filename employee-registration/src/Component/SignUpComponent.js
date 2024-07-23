@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Accordion, AccordionSummary, AccordionDetails, Paper } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+import { Accordion, AccordionSummary, AccordionDetails, Paper, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -36,6 +36,9 @@ function SignUpComponent() {
   const [address, setAddress] = useState([]);
   const [employmentDetails, setEmploymentDetails] = useState([]);
   const [employee, setEmployee] = useState([]);
+
+  const dateInputRef = useRef(null);
+  const dateInputRef1 = useRef(null);
 
   const [formData, setFormData] = useState({
     employeeRegistrationID: 0,
@@ -168,6 +171,14 @@ function SignUpComponent() {
       }, 5000); // Navigate to another route upon success
       setLoading(false); // Stop loading state
     }
+  };
+
+  const handleDateInputClick = () => {
+    dateInputRef.current.showPicker();
+  };
+
+  const handleDateInputClick1 = () => {
+    dateInputRef1.current.showPicker();
   };
 
   const fetchDataById = async () => {
@@ -373,21 +384,32 @@ function SignUpComponent() {
                   onChange={handleInputChange}
                   autoComplete="bday"
                   type="date"
+                  inputRef={dateInputRef1}
+                  onClick={handleDateInputClick1}
                   inputProps={{ max: formatDate(new Date()) }} 
                 />
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
+              <FormControl fullWidth required>
+                <InputLabel id="gender-label">Gender</InputLabel>
+                <Select
+                  labelId="gender-label"
                   id="gender"
-                  label="Gender"
                   name="gender"
                   value={formData.gender}
                   onChange={handleInputChange}
+                  label="Gender"
                   autoComplete="sex"
-                />
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value="Female">Female</MenuItem>
+                  <MenuItem value="Male">Male</MenuItem>
+                  <MenuItem value="Prefer not to say">Prefer not to say</MenuItem>
+                </Select>
+              </FormControl>
               </Grid>
 
               <Grid item xs={12} sm={6}>
@@ -399,10 +421,6 @@ function SignUpComponent() {
                   name="salary"
                   value={formData.salary}
                   onChange={handleInputChange}
-                  type="number"
-                  InputProps={{
-                    inputProps: { min: 0 } 
-                  }}
                 />
               </Grid>
 
@@ -550,6 +568,8 @@ function SignUpComponent() {
                         label="Start Date"
                         name="startDate"
                         value={formData.startDate ? formData.startDate.slice(0, 10) : ''}
+                        inputRef={dateInputRef}
+                        onClick={handleDateInputClick}
                         onChange={handleInputChange}
                         type="date"
                         InputLabelProps={{
@@ -558,16 +578,28 @@ function SignUpComponent() {
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField
-                        required
-                        fullWidth
-                        id="employmentStatus"
-                        label="Employment Status"
-                        name="employmentStatus"
-                        value={formData.employmentStatus}
-                         onChange={handleInputChange}
-                        autoComplete="organization-role"
-                      />
+                    <FormControl fullWidth required>
+                        <InputLabel id="employment-status-label">Employment Status</InputLabel>
+                        <Select
+                          labelId="employment-status-label"
+                          id="employmentStatus"
+                          name="employmentStatus"
+                          value={formData.employmentStatus}
+                          onChange={handleInputChange}
+                          label="Employment Status"
+                          autoComplete="organization-role"
+                        >
+                          <MenuItem value="">
+                            <em>None</em>
+                          </MenuItem>
+                          <MenuItem value="Full Time">Full Time</MenuItem>
+                          <MenuItem value="Part Time">Part Time</MenuItem>
+                          <MenuItem value="Internship">Internship</MenuItem>
+                          <MenuItem value="Contract">Contract</MenuItem>
+                          <MenuItem value="Temporary">Temporary</MenuItem>
+                          <MenuItem value="Freelance">Freelance</MenuItem>
+                        </Select>
+                      </FormControl>
                       </Grid>
                     </Grid>
                   </AccordionDetails>
@@ -597,7 +629,13 @@ function SignUpComponent() {
     </ThemeProvider>
         </main>
       </div>
-      <div className="footer">Footer</div>
+      <div className="footer"><p >
+          &copy; {new Date().getFullYear()} XYZ Company. All rights reserved.
+        </p>
+        <br/>
+        <p >
+          Contact: contact@xyzcompany.com | Phone: +1 (123) 456-7890
+        </p></div>
     </div>
     </>
     
