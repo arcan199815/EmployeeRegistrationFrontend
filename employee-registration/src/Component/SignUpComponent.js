@@ -25,20 +25,27 @@ import 'react-toastify/dist/ReactToastify.css';
 import Link from '@mui/material/Link';
 import EmployeeRegistrationService from '../Services/EmployeeRegistrationService';
 import LoadingIndicator from './LoadingIndicator';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import SignUpPdfComponent from './SignUpPdfComponent';
 
 function SignUpComponent() {
   const [isOpened, setIsOpened] = useState(true);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [showPdf, setShowPdf] = useState(false);
+  const [expandedAccordion, setExpandedAccordion] = useState(false);
   const { logout } = useAuth();
   const location = useLocation();
   const { employees } = location.state|| {};
   const [address, setAddress] = useState([]);
   const [employmentDetails, setEmploymentDetails] = useState([]);
   const [employee, setEmployee] = useState([]);
+  const [edit, setEdit] = useState(false);
 
   const dateInputRef = useRef(null);
   const dateInputRef1 = useRef(null);
+  const contentRef = useRef(null);
 
   const [formData, setFormData] = useState({
     employeeRegistrationID: 0,
@@ -64,6 +71,33 @@ function SignUpComponent() {
     employmentStatus: ''
   });
 
+  const downloadPDF = () => {
+    debugger;
+    const input = contentRef.current;
+    
+        if (!input) {
+          console.error('Cannot find content to convert to PDF');
+          return;
+        }
+    
+        html2canvas(input).then((canvas) => {
+          const imgData = canvas.toDataURL('image/png');
+          const pdf = new jsPDF('p', 'mm', 'a4');
+          const width = pdf.internal.pageSize.getWidth();
+          const height = pdf.internal.pageSize.getHeight();
+    
+          pdf.addImage(imgData, 'JPEG', 0, 0, width, height);
+    
+          // Example: Add form data to PDF
+          const startY = 20; // Adjust as needed for positioning
+          // pdf.text(`Employee Name: ${formData.empName}`, 20, startY);
+          // pdf.text(`Employee ID: ${formData.empId}`, 20, startY + 10);
+          // pdf.text(`Email Address: ${formData.empEmailId}`, 20, startY + 20);
+    
+          pdf.save('employee_registration.pdf');
+        });
+        setShowPdf(false);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -152,13 +186,17 @@ function SignUpComponent() {
   
     try {
       // Call the register function from AuthService
-      setLoading(true);
+      setLoading(false);
       const userData = await EmployeeRegistrationService.register(formData);
       debugger;
+    setShowPdf(true);
       if (userData.data == true) {
+        setShowPdf(true); // Set showPdf to true to trigger PDF download
+        setExpandedAccordion(true);
         toast.success("Employee Registered successfully",{
           autoClose: 5000, // 5000 milliseconds = 5 seconds
-        });
+        });if(edit==false){
+        downloadPDF();}
       } else {
         toast.error("Registration failed. Please try again.");
       }
@@ -244,13 +282,19 @@ function SignUpComponent() {
       return date.toISOString().split('T')[0];
     };
 
+    const handleAccordionToggle = () => {
+      setExpandedAccordion(!expandedAccordion); // Toggle accordion state
+    };
+
     useEffect(() => {
       debugger;
+      //contentRef.current = document.querySelector('.main');
       setLoading(false);
       if(employees){
+        setEdit(true);
       fetchDataById(); // Set loading to false once initialization is done
       }
-    }, []);
+    }, [contentRef]);
   
     if (loading) {
       return <LoadingIndicator />;
@@ -260,6 +304,7 @@ function SignUpComponent() {
   return (
     <>
     <ToastContainer />
+    
     <div className="Layout">
       <div className="header">
     <div className="icon" onClick={() => setIsOpened(!isOpened)}>
@@ -290,7 +335,7 @@ function SignUpComponent() {
         </Paper>
       </Grid>
         </aside>
-        <main className="main">
+        <main className="main" ref={contentRef}>
         <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="sm">
         <CssBaseline />
@@ -350,10 +395,10 @@ function SignUpComponent() {
                 />
               </Grid>
 
-              <Grid item xs={12}>
+               <Grid item xs={12}>
               <Grid container spacing={2}>
               <Grid item xs={12}>
-              <Accordion>
+              <Accordion >
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     Personal Information
                   </AccordionSummary>
@@ -607,15 +652,12 @@ function SignUpComponent() {
                 </Grid>
                 </Grid>
               </Grid>
-              {/* <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid> */}
+
             </Grid>
+            
             <Button
               type="submit"
+              //ref={contentRef}
               fullWidth
               variant="contained"
               onClick={handleSubmit}
@@ -624,8 +666,18 @@ function SignUpComponent() {
               Register
             </Button>
           </Box>
+          
         </Box>
       </Container>
+      {/* {showPdf && (
+        <SignUpPdfComponent
+          isOpened={isOpened}
+          setIsOpened={setIsOpened}
+          contentRef={contentRef}
+          setShowPdf={setShowPdf}
+          formData={formData}
+        />
+      )} */}
     </ThemeProvider>
         </main>
       </div>

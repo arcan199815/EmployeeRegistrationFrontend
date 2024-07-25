@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import PrivateRoute from './Component/PrivateRoute';
 import { AuthProvider, useAuth } from './Component/AuthContext';
 import SignUpUserComponent from './Component/SignUpUserComponent';
+import SignUpPdfComponent from './Component/SignUpPdfComponent';
 import NotFoundPage from './Component/NotFoundPage ';
 import { ToastContainer } from 'react-toastify';
 
@@ -29,6 +30,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<SignInComponent />} />
         <Route path="/signupemployee" element={isLoggedIn ?<SignUpComponent />: <Navigate to="/notfoundpage" replace />} />
+        <Route path="/signuppdfemployee" element={isLoggedIn ?<SignUpPdfComponent />: <Navigate to="/notfoundpage" replace />} />
         <Route path="/signupuser" element={<SignUpUserComponent />} />
         <Route path="/layout" element={isLoggedIn ? <Layout /> : <Navigate to="/notfoundpage" replace />} />
         <Route path="*" element={<NotFoundPage />} />
