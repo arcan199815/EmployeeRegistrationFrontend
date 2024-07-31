@@ -7,6 +7,7 @@ const requestData = {
   password: '',
   username: '',
   token: '',
+  roles: '',
 };
 
 const register = async (formData) => {
@@ -14,6 +15,7 @@ const register = async (formData) => {
   requestData.username=formData.username;
   requestData.email= formData.email;
   requestData.password= formData.password;
+  requestData.roles= formData.role;
     return await axios.post(API_URL + "Register", requestData);
   };
 

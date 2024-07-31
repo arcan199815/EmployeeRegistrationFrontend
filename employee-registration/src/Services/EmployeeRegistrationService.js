@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useAuth } from "../Component/AuthContext";
 
 const API_URL = "https://localhost:44301/api/";
 
@@ -25,6 +26,8 @@ const requestData = {
   startDate: null,
   employmentStatus: ''
 };
+
+
 
 const register = async (formData) => {
   debugger;
@@ -57,15 +60,19 @@ const register = async (formData) => {
 };
 
 
-const fetchEmployeeRegistration = async (searchKeyword) => {
+const fetchEmployeeRegistration = async (searchKeyword, token) => {
     try {
         debugger;
+        
       const response = await axios.get(`${API_URL}EmployeeRegistration`, {
         params: {
           pageSize: 100,
           pageNumber: 1,
           searchKeyword: searchKeyword
-        }
+        },
+        headers: {
+            Authorization: `Bearer ${token}`
+          }
       });
       return response.data;
     } catch (error) {

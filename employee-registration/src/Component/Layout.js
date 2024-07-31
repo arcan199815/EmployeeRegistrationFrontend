@@ -40,6 +40,7 @@ function Layout() {
     const { logout } = useAuth();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    const { token } = useAuth();
 
     const handleChangePage = (event, newPage) => {
       debugger;
@@ -101,7 +102,7 @@ function Layout() {
     const fetchData = async () => {
       try {
         debugger;
-        const data = await EmployeeRegistrationService.fetchEmployeeRegistration(searchQuery);
+        const data = await EmployeeRegistrationService.fetchEmployeeRegistration(searchQuery,token);
         console.log('Fetched employee registration:', data);
         setEmployee(data.employees);
         setTotalCount(data.totalCount);

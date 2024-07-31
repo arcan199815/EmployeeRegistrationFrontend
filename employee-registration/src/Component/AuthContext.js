@@ -20,6 +20,8 @@ export const AuthProvider = ({ children }) => {
   });
   //setIsLoggedIn(isLoggedInUser);
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+  const [role, setRole] = useState(null);
 
   const login = async (formData) => {
     // Implement your login logic here
@@ -36,7 +38,10 @@ export const AuthProvider = ({ children }) => {
         if (response.data.token) {
           localStorage.setItem("user", JSON.stringify(response.data));
           localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('token',response.data.token);
           setIsLoggedIn(true);
+          setToken(response.data.token);
+          setRole(response.data.roles);
           setUser(response.data);
         }
   
@@ -57,7 +62,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, user, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, user, role, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

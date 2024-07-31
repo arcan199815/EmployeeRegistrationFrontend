@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import { Accordion, AccordionSummary, AccordionDetails, FormControl, MenuItem, InputLabel, Select } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -30,6 +30,7 @@ function SignUpUserComponent() {
     username: '',
     email: '',
     password: '',
+    role:'',
   });
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
   const [confirmpassword, setConfirmPassword] = useState('');
@@ -67,6 +68,11 @@ function SignUpUserComponent() {
     if(confirmpassword != formData.password)
     {
         toast.error("Password Didnot Match");
+        return;
+    }
+    if(formData.role==null || formData.role=="")
+    {
+      toast.error("Role Required");
         return;
     }
 
@@ -177,6 +183,26 @@ function SignUpUserComponent() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   autoComplete="new-password"
                 />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+              <FormControl fullWidth required>
+                <InputLabel id="role-label">Role</InputLabel>
+                <Select
+                  labelId="role-label"
+                  id="role"
+                  name="role"
+                  value={formData.role}
+                  onChange={handleInputChange}
+                  label="Gender"
+                  autoComplete="sex"
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value="Admin">Admin</MenuItem>
+                  <MenuItem value="Employee">Employee</MenuItem>
+                </Select>
+              </FormControl>
               </Grid>
             </Grid>
             <Button
