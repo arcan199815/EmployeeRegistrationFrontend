@@ -35,17 +35,17 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 
-function Layout() {
-  const [isOpened, setIsOpened] = useState(true);
+function Layout_Role() {
+  const [isOpened, setIsOpened] = useState(true); //
   const [searchQuery, setSearchQuery] = useState(null);
-  const [employee, setEmployee] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [Id, setId] = useState(0);
+  const [employee, setEmployee] = useState([]); //
+  const [totalCount, setTotalCount] = useState(0); //
+  const [Id, setId] = useState(0); //
   const navigate = useNavigate();
-  const { logout } = useAuth();
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const { token } = useAuth();
+  const { logout } = useAuth(); //
+  const [page, setPage] = useState(0); //
+  const [rowsPerPage, setRowsPerPage] = useState(5); //
+  const { token } = useAuth(); //
 
   const handleChangePage = (event, newPage) => {
     debugger;
@@ -199,44 +199,6 @@ function Layout() {
                   background: "#adaaaa",
                   cursor: "pointer",
                 }}
-                onClick={navigateToEmployeeRegistration}
-              >
-                <Typography
-                  variant="h14"
-                  color="#090305"
-                  fontFamily=' "Playwrite CU", cursive;'
-                >
-                  User
-                </Typography>
-              </Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper
-                style={{
-                  padding: "1rem",
-                  textAlign: "center",
-                  background: "#adaaaa",
-                  cursor: "pointer",
-                }}
-                onClick={navigateToEmployeeRegistration}
-              >
-                <Typography
-                  variant="h14"
-                  color="#090305"
-                  fontFamily=' "Playwrite CU", cursive;'
-                >
-                  Role
-                </Typography>
-              </Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper
-                style={{
-                  padding: "1rem",
-                  textAlign: "center",
-                  background: "#adaaaa",
-                  cursor: "pointer",
-                }}
                 onClick={navigateLogout}
               >
                 <Typography
@@ -262,7 +224,7 @@ function Layout() {
                   </Typography>
                 </Paper>
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <TextField
                   fullWidth
                   id="search"
@@ -271,7 +233,7 @@ function Layout() {
                   value={searchQuery}
                   onChange={handleSearchChange}
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
             <TableContainer
               component={Paper}
@@ -281,14 +243,11 @@ function Layout() {
                 <TableHead>
                   <TableRow>
                     <TableCell>Action</TableCell>
-                    <TableCell>Emp Name</TableCell>
-                    <TableCell>Emp Id</TableCell>
-                    <TableCell>EmailId</TableCell>
-                    <TableCell>Mobile Number</TableCell>
-                    <TableCell>DOB</TableCell>
-                    <TableCell>Gender</TableCell>
+                    <TableCell>Role Name</TableCell>
+                    <TableCell>Role Description</TableCell>
                   </TableRow>
                 </TableHead>
+                {/*
                 <TableBody>
                   {(rowsPerPage > 0
                     ? employee.slice(
@@ -322,9 +281,10 @@ function Layout() {
                       <TableCell>{row.vgender}</TableCell>
                     </TableRow>
                   ))}
-                </TableBody>
+                </TableBody>{" "}
+                */}
               </Table>
-              <TablePagination
+              {/* <TablePagination
                 rowsPerPageOptions={5} // Options for rows per page dropdown
                 component="div"
                 count={totalCount} // Total number of rows
@@ -332,7 +292,7 @@ function Layout() {
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
-              />
+              /> */}
             </TableContainer>
           </main>
         </div>
@@ -348,4 +308,4 @@ function Layout() {
   );
 }
 
-export default Layout;
+export default Layout_Role;

@@ -1,14 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import SignInComponent from './Component/SignInComponent';
-import SignUpComponent from './Component/SignUpComponent';
-import Layout from './Component/Layout';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import PrivateRoute from './Component/PrivateRoute';
-import { AuthProvider, useAuth } from './Component/AuthContext';
-import SignUpUserComponent from './Component/SignUpUserComponent';
-import SignUpPdfComponent from './Component/SignUpPdfComponent';
-import NotFoundPage from './Component/NotFoundPage ';
-import { ToastContainer } from 'react-toastify';
+import React, { useEffect, useState } from "react";
+import SignInComponent from "./Component/SignInComponent";
+import SignUpComponent from "./Component/SignUpComponent";
+import Layout_User from "./Component/Layout_User";
+import Layout_Role from "./Component/Layout_Role";
+import Layout from "./Component/Layout";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import PrivateRoute from "./Component/PrivateRoute";
+import { AuthProvider, useAuth } from "./Component/AuthContext";
+import SignUpUserComponent from "./Component/SignUpUserComponent";
+import SignUpPdfComponent from "./Component/SignUpPdfComponent";
+import NotFoundPage from "./Component/NotFoundPage ";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   debugger;
@@ -24,25 +31,69 @@ function App() {
   }
   return (
     <>
-    {/* <AuthProvider> */}
-    <ToastContainer />
-    <Router>
-      <Routes>
-        <Route exact path="/" element={<SignInComponent />} />
-        <Route path="/signupemployee" element={isLoggedIn ?<SignUpComponent />: <Navigate to="/notfoundpage" replace />} />
-        <Route path="/signuppdfemployee" element={isLoggedIn ?<SignUpPdfComponent />: <Navigate to="/notfoundpage" replace />} />
-        <Route path="/signupuser" element={<SignUpUserComponent />} />
-        <Route path="/layout" element={isLoggedIn ? <Layout /> : <Navigate to="/notfoundpage" replace />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </Router>
-     {/* </AuthProvider> */}
-     {/* {!isLoggedIn && <Router>
+      {/* <AuthProvider> */}
+      <ToastContainer />
+      <Router>
+        <Routes>
+          <Route exact path="/" element={<SignInComponent />} />
+          <Route
+            path="/signupemployee"
+            element={
+              isLoggedIn ? (
+                <SignUpComponent />
+              ) : (
+                <Navigate to="/notfoundpage" replace />
+              )
+            }
+          />
+          <Route
+            path="/signuppdfemployee"
+            element={
+              isLoggedIn ? (
+                <SignUpPdfComponent />
+              ) : (
+                <Navigate to="/notfoundpage" replace />
+              )
+            }
+          />
+          <Route path="/signupuser" element={<SignUpUserComponent />} />
+          <Route
+            path="/layout"
+            element={
+              isLoggedIn ? <Layout /> : <Navigate to="/notfoundpage" replace />
+            }
+          />
+
+          <Route
+            path="/layoutuser"
+            element={
+              isLoggedIn ? (
+                <Layout_User />
+              ) : (
+                <Navigate to="/notfoundpage" replace />
+              )
+            }
+          />
+          <Route
+            path="/layoutrole"
+            element={
+              isLoggedIn ? (
+                <Layout_Role />
+              ) : (
+                <Navigate to="/notfoundpage" replace />
+              )
+            }
+          />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Router>
+      {/* </AuthProvider> */}
+      {/* {!isLoggedIn && <Router>
       <Routes>
         <Route path="/notfoundpage" element={<NotFoundPage />}/>
       </Routes>
      </Router>} */}
-     </>
+    </>
   );
 }
 
