@@ -265,6 +265,14 @@ function SignUpComponent() {
     });
   };
 
+  const navigateToUser = () => {
+    navigate("/layoutuser");
+  };
+
+  const navigateToRole = () => {
+    navigate("/layoutrole");
+  };
+
   const navigateToEmployeeRegistration = () => {
     navigate('/signupemployee');}
 
@@ -329,6 +337,44 @@ function SignUpComponent() {
           <Typography variant="h14" color='#090305' fontFamily=' "Playwrite CU", cursive;'>Employee Registration</Typography>
         </Paper>
       </Grid>
+      <Grid item xs={12}>
+              <Paper
+                style={{
+                  padding: "1rem",
+                  textAlign: "center",
+                  background: "#adaaaa",
+                  cursor: "pointer",
+                }}
+                onClick={navigateToUser}
+              >
+                <Typography
+                  variant="h14"
+                  color="#090305"
+                  fontFamily=' "Playwrite CU", cursive;'
+                >
+                  User
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper
+                style={{
+                  padding: "1rem",
+                  textAlign: "center",
+                  background: "#adaaaa",
+                  cursor: "pointer",
+                }}
+                onClick={navigateToRole}
+              >
+                <Typography
+                  variant="h14"
+                  color="#090305"
+                  fontFamily=' "Playwrite CU", cursive;'
+                >
+                  Role
+                </Typography>
+              </Paper>
+            </Grid>
       <Grid item xs={12}>
       <Paper style={{ padding: '1rem', textAlign: 'center', background: '#adaaaa', cursor: 'pointer' }} onClick={navigateLogout}>
           <Typography variant="h14" color='#090305' fontFamily=' "Playwrite CU", cursive;'>Logout</Typography>

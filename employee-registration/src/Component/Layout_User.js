@@ -29,7 +29,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import EmployeeRegistrationService from "../Services/EmployeeRegistrationService";
+import UserService from "../Services/UserService";
 import EditIcon from "@mui/icons-material/Edit"; // Import EditIcon from Material-UI
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
@@ -44,7 +44,7 @@ function Layout_User() {
   const navigate = useNavigate();
   const { logout } = useAuth(); //
   const [page, setPage] = useState(0); //
-  const [rowsPerPage, setRowsPerPage] = useState(5); //
+  const [rowsPerPage, setRowsPerPage] = useState(6); //
   const { token } = useAuth(); //
 
   const handleChangePage = (event, newPage) => {
@@ -73,6 +73,11 @@ function Layout_User() {
   //   row.vempName.toLowerCase().includes(searchQuery.toLowerCase())
   // );
 
+
+  const navigateToRole = () => {
+    navigate("/layoutrole");
+  };
+
   const navigateToEmployeeRegistration = () => {
     navigate("/signupemployee");
   };
@@ -93,18 +98,18 @@ function Layout_User() {
 
   //const editEmployee =
 
-  const deleteData = async (rowData) => {
-    debugger;
-    try {
-      await EmployeeRegistrationService.deleteEmployee(
-        rowData.iemployeeRegistrationId
-      );
-      console.log("Records Deleted successfully");
-      window.location.reload();
-    } catch (error) {
-      console.log("Something went wrong", error);
-    }
-  };
+  // const deleteData = async (rowData) => {
+  //   debugger;
+  //   try {
+  //     await EmployeeRegistrationService.deleteEmployee(
+  //       rowData.iemployeeRegistrationId
+  //     );
+  //     console.log("Records Deleted successfully");
+  //     window.location.reload();
+  //   } catch (error) {
+  //     console.log("Something went wrong", error);
+  //   }
+  // };
 
   const editData = async (rowData) => {
     navigate("/signupemployee", { state: { employees: rowData } });
@@ -113,15 +118,14 @@ function Layout_User() {
   const fetchData = async () => {
     try {
       debugger;
-      const data = await EmployeeRegistrationService.fetchEmployeeRegistration(
-        searchQuery,
+      const data = await UserService.fetchUser(
         token
       );
-      console.log("Fetched employee registration:", data);
-      setEmployee(data.employees);
+      console.log("Fetched User registration:", data);
+      setEmployee(data.users);
       setTotalCount(data.totalCount);
     } catch (error) {
-      console.error("Error fetching employee registration:", error);
+      console.error("Error fetching User registration:", error);
     }
   };
 
@@ -136,7 +140,7 @@ function Layout_User() {
           <div className="icon" onClick={() => setIsOpened(!isOpened)}>
             {isOpened ? <ChevronLeftIcon /> : <MenuIcon />}
           </div>
-          <div className="header-title">Employee Dashboard</div>
+          <div className="header-title">User Dashboard</div>
         </div>
         <div className="container">
           <aside className={`${isOpened ? "opened" : ""} drawer`}>
@@ -203,6 +207,44 @@ function Layout_User() {
                   background: "#adaaaa",
                   cursor: "pointer",
                 }}
+                onClick={navigateToUser}
+              >
+                <Typography
+                  variant="h14"
+                  color="#090305"
+                  fontFamily=' "Playwrite CU", cursive;'
+                >
+                  User
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper
+                style={{
+                  padding: "1rem",
+                  textAlign: "center",
+                  background: "#adaaaa",
+                  cursor: "pointer",
+                }}
+                onClick={navigateToRole}
+              >
+                <Typography
+                  variant="h14"
+                  color="#090305"
+                  fontFamily=' "Playwrite CU", cursive;'
+                >
+                  Role
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper
+                style={{
+                  padding: "1rem",
+                  textAlign: "center",
+                  background: "#adaaaa",
+                  cursor: "pointer",
+                }}
                 onClick={navigateLogout}
               >
                 <Typography
@@ -224,19 +266,9 @@ function Layout_User() {
                     variant="h12"
                     fontFamily=' "Playwrite CU", cursive;'
                   >
-                    Employees
+                    Users
                   </Typography>
                 </Paper>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  id="search"
-                  label="Search Employee"
-                  variant="outlined"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                />
               </Grid>
             </Grid>
             <TableContainer
@@ -252,7 +284,6 @@ function Layout_User() {
                     <TableCell>Role</TableCell>
                   </TableRow>
                 </TableHead>
-                {/*
                 <TableBody>
                   {(rowsPerPage > 0
                     ? employee.slice(
@@ -270,34 +301,30 @@ function Layout_User() {
                               marginRight: "10px",
                               fontSize: "20px",
                             }}
-                            onClick={() => editData(row)}
+                            //onClick={() => editData(row)}
                           />
                           <DeleteIcon
                             style={{ cursor: "pointer", fontSize: "20px" }}
-                            onClick={() => deleteData(row)}
+                            //onClick={() => deleteData(row)}
                           />{" "}
                         </span>
                       </TableCell>
-                      <TableCell>{row.vempName}</TableCell>
-                      <TableCell>{row.iempId}</TableCell>
-                      <TableCell>{row.vempEmailId}</TableCell>
-                      <TableCell>{row.vemployeeMobileNumber}</TableCell>
-                      <TableCell>{row.vdob}</TableCell>
-                      <TableCell>{row.vgender}</TableCell>
+                      <TableCell>{row.vuserName}</TableCell>
+                      <TableCell>{row.vemailId}</TableCell>
+                      <TableCell>{row.vrole}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>{" "}
-                */}
               </Table>
-              {/* <TablePagination
-                rowsPerPageOptions={5} // Options for rows per page dropdown
+              <TablePagination
+                rowsPerPageOptions={6} // Options for rows per page dropdown
                 component="div"
                 count={totalCount} // Total number of rows
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
-              /> */}
+              />
             </TableContainer>
           </main>
         </div>

@@ -73,6 +73,14 @@ function Layout() {
   //   row.vempName.toLowerCase().includes(searchQuery.toLowerCase())
   // );
 
+  const navigateToUser = () => {
+    navigate("/layoutuser");
+  };
+
+  const navigateToRole = () => {
+    navigate("/layoutrole");
+  };
+
   const navigateToEmployeeRegistration = () => {
     navigate("/signupemployee");
   };
@@ -199,7 +207,7 @@ function Layout() {
                   background: "#adaaaa",
                   cursor: "pointer",
                 }}
-                onClick={navigateToEmployeeRegistration}
+                onClick={navigateToUser}
               >
                 <Typography
                   variant="h14"
@@ -218,7 +226,7 @@ function Layout() {
                   background: "#adaaaa",
                   cursor: "pointer",
                 }}
-                onClick={navigateToEmployeeRegistration}
+                onClick={navigateToRole}
               >
                 <Typography
                   variant="h14"

@@ -29,7 +29,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import EmployeeRegistrationService from "../Services/EmployeeRegistrationService";
+import UserService from "../Services/UserService";
 import EditIcon from "@mui/icons-material/Edit"; // Import EditIcon from Material-UI
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
@@ -73,6 +73,14 @@ function Layout_Role() {
   //   row.vempName.toLowerCase().includes(searchQuery.toLowerCase())
   // );
 
+  const navigateToUser = () => {
+    navigate("/layoutuser");
+  };
+
+  const navigateToRole = () => {
+    navigate("/layoutrole");
+  };
+
   const navigateToEmployeeRegistration = () => {
     navigate("/signupemployee");
   };
@@ -89,18 +97,18 @@ function Layout_Role() {
 
   //const editEmployee =
 
-  const deleteData = async (rowData) => {
-    debugger;
-    try {
-      await EmployeeRegistrationService.deleteEmployee(
-        rowData.iemployeeRegistrationId
-      );
-      console.log("Records Deleted successfully");
-      window.location.reload();
-    } catch (error) {
-      console.log("Something went wrong", error);
-    }
-  };
+  // const deleteData = async (rowData) => {
+  //   debugger;
+  //   try {
+  //     await EmployeeRegistrationService.deleteEmployee(
+  //       rowData.iemployeeRegistrationId
+  //     );
+  //     console.log("Records Deleted successfully");
+  //     window.location.reload();
+  //   } catch (error) {
+  //     console.log("Something went wrong", error);
+  //   }
+  // };
 
   const editData = async (rowData) => {
     navigate("/signupemployee", { state: { employees: rowData } });
@@ -109,15 +117,14 @@ function Layout_Role() {
   const fetchData = async () => {
     try {
       debugger;
-      const data = await EmployeeRegistrationService.fetchEmployeeRegistration(
-        searchQuery,
+      const data = await UserService.fetchRole(
         token
       );
-      console.log("Fetched employee registration:", data);
-      setEmployee(data.employees);
+      console.log("Fetched Role:", data);
+      setEmployee(data.userRoles);
       setTotalCount(data.totalCount);
     } catch (error) {
-      console.error("Error fetching employee registration:", error);
+      console.error("Error fetching Role:", error);
     }
   };
 
@@ -199,6 +206,45 @@ function Layout_Role() {
                   background: "#adaaaa",
                   cursor: "pointer",
                 }}
+                onClick={navigateToUser}
+              >
+                <Typography
+                  variant="h14"
+                  color="#090305"
+                  fontFamily=' "Playwrite CU", cursive;'
+                >
+                  User
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper
+                style={{
+                  padding: "1rem",
+                  textAlign: "center",
+                  background: "#adaaaa",
+                  cursor: "pointer",
+                }}
+                onClick={navigateToRole}
+              >
+                <Typography
+                  variant="h14"
+                  color="#090305"
+                  fontFamily=' "Playwrite CU", cursive;'
+                >
+                  Role
+                </Typography>
+              </Paper>
+            </Grid>
+            
+            <Grid item xs={12}>
+              <Paper
+                style={{
+                  padding: "1rem",
+                  textAlign: "center",
+                  background: "#adaaaa",
+                  cursor: "pointer",
+                }}
                 onClick={navigateLogout}
               >
                 <Typography
@@ -220,7 +266,7 @@ function Layout_Role() {
                     variant="h12"
                     fontFamily=' "Playwrite CU", cursive;'
                   >
-                    Employees
+                    Roles
                   </Typography>
                 </Paper>
               </Grid>
@@ -247,7 +293,7 @@ function Layout_Role() {
                     <TableCell>Role Description</TableCell>
                   </TableRow>
                 </TableHead>
-                {/*
+                
                 <TableBody>
                   {(rowsPerPage > 0
                     ? employee.slice(
@@ -265,26 +311,22 @@ function Layout_Role() {
                               marginRight: "10px",
                               fontSize: "20px",
                             }}
-                            onClick={() => editData(row)}
+                            //onClick={() => editData(row)}
                           />
                           <DeleteIcon
                             style={{ cursor: "pointer", fontSize: "20px" }}
-                            onClick={() => deleteData(row)}
+                            //onClick={() => deleteData(row)}
                           />{" "}
                         </span>
                       </TableCell>
-                      <TableCell>{row.vempName}</TableCell>
-                      <TableCell>{row.iempId}</TableCell>
-                      <TableCell>{row.vempEmailId}</TableCell>
-                      <TableCell>{row.vemployeeMobileNumber}</TableCell>
-                      <TableCell>{row.vdob}</TableCell>
-                      <TableCell>{row.vgender}</TableCell>
+                      <TableCell>{row.vroleName}</TableCell>
+                      <TableCell>{row.vroleDescription}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>{" "}
-                */}
+               
               </Table>
-              {/* <TablePagination
+              <TablePagination
                 rowsPerPageOptions={5} // Options for rows per page dropdown
                 component="div"
                 count={totalCount} // Total number of rows
@@ -292,7 +334,7 @@ function Layout_Role() {
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
-              /> */}
+              />
             </TableContainer>
           </main>
         </div>
