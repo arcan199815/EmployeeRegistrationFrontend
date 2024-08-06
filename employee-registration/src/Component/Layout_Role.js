@@ -128,6 +128,19 @@ function Layout_Role() {
     }
   };
 
+  const deleteData = async (rowData) => {
+    debugger;
+    try {
+      await UserService.deleteRole(
+        rowData.iroleId
+      );
+      console.log("Records Deleted successfully");
+      window.location.reload();
+    } catch (error) {
+      console.log("Something went wrong", error);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -236,7 +249,7 @@ function Layout_Role() {
                 </Typography>
               </Paper>
             </Grid>
-            
+
             <Grid item xs={12}>
               <Paper
                 style={{
@@ -293,7 +306,7 @@ function Layout_Role() {
                     <TableCell>Role Description</TableCell>
                   </TableRow>
                 </TableHead>
-                
+
                 <TableBody>
                   {(rowsPerPage > 0
                     ? employee.slice(
@@ -305,17 +318,9 @@ function Layout_Role() {
                     <TableRow key={row.id}>
                       <TableCell>
                         <span style={{ display: "flex", alignItems: "center" }}>
-                          <EditIcon
-                            style={{
-                              cursor: "pointer",
-                              marginRight: "10px",
-                              fontSize: "20px",
-                            }}
-                            //onClick={() => editData(row)}
-                          />
                           <DeleteIcon
                             style={{ cursor: "pointer", fontSize: "20px" }}
-                            //onClick={() => deleteData(row)}
+                            onClick={() => deleteData(row)}
                           />{" "}
                         </span>
                       </TableCell>
@@ -324,7 +329,7 @@ function Layout_Role() {
                     </TableRow>
                   ))}
                 </TableBody>{" "}
-               
+
               </Table>
               <TablePagination
                 rowsPerPageOptions={5} // Options for rows per page dropdown

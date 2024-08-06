@@ -34,6 +34,8 @@ import EditIcon from "@mui/icons-material/Edit"; // Import EditIcon from Materia
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import AddIcon from "@mui/icons-material/Add";
 
 function Layout_User() {
   const [isOpened, setIsOpened] = useState(true); //
@@ -105,21 +107,21 @@ function Layout_User() {
 
   //const editEmployee =
 
-  // const deleteData = async (rowData) => {
-  //   debugger;
-  //   try {
-  //     await EmployeeRegistrationService.deleteEmployee(
-  //       rowData.iemployeeRegistrationId
-  //     );
-  //     console.log("Records Deleted successfully");
-  //     window.location.reload();
-  //   } catch (error) {
-  //     console.log("Something went wrong", error);
-  //   }
-  // };
+  const deleteData = async (rowData) => {
+    debugger;
+    try {
+      await UserService.deleteUser(
+        rowData.iuserId
+      );
+      console.log("Records Deleted successfully");
+      window.location.reload();
+    } catch (error) {
+      console.log("Something went wrong", error);
+    }
+  };
 
   const editData = async (rowData) => {
-    navigate("/signupemployee", { state: { employees: rowData } });
+    navigate("/createuser", { state: { users: rowData } });
   };
 
   const fetchData = async () => {
@@ -263,30 +265,34 @@ function Layout_User() {
             </Grid>
           </aside>
           <main className="main">
-            <Grid container spacing={2}>
-              {/* Table Header */}
-              <Grid item xs={12}>
-                <Paper style={{ padding: "1rem" }}>
-                  <Typography
-                    variant="h12"
-                    fontFamily=' "Playwrite CU", cursive;'
-                  >
-                    Users
-                    <Grid item>
-                      <Paper style={{ padding: "1rem", textAlign: "right" }}>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={navigateToCreateUser}
-                        >
-                          Create User
-                        </Button>
-                      </Paper>
-                    </Grid>
-                  </Typography>
-                </Paper>
-              </Grid>
-            </Grid>
+          <Grid container spacing={2}>
+  {/* Table Header */}
+  <Grid item xs={12}>
+    <Paper style={{ padding: "1rem" }}>
+      <Grid container alignItems="center" spacing={1}>
+        <Grid item>
+          {/* <Typography
+            variant="h6"
+            fontFamily='"Playwrite CU", cursive'
+          >
+            Users
+          </Typography> */}
+        </Grid>
+        <Grid item>
+          <AddIcon
+            style={{
+              cursor: "pointer",
+              fontSize: 32, // Adjust size as needed
+              color: "primary", // Adjust color as needed
+            }}
+            onClick={navigateToCreateUser} // Attach click event
+          />
+        </Grid>
+      </Grid>
+    </Paper>
+  </Grid>
+</Grid>
+
             <TableContainer
               component={Paper}
               fontFamily=' "Playwrite CU", cursive;'
@@ -311,17 +317,17 @@ function Layout_User() {
                     <TableRow key={row.id}>
                       <TableCell>
                         <span style={{ display: "flex", alignItems: "center" }}>
-                          <EditIcon
+                        <VisibilityIcon
                             style={{
                               cursor: "pointer",
                               marginRight: "10px",
                               fontSize: "20px",
                             }}
-                            //onClick={() => editData(row)}
+                            onClick={() => editData(row)}
                           />
                           <DeleteIcon
                             style={{ cursor: "pointer", fontSize: "20px" }}
-                            //onClick={() => deleteData(row)}
+                            onClick={() => deleteData(row)}
                           />{" "}
                         </span>
                       </TableCell>
