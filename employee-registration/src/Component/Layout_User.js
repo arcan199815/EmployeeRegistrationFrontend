@@ -73,7 +73,6 @@ function Layout_User() {
   //   row.vempName.toLowerCase().includes(searchQuery.toLowerCase())
   // );
 
-
   const navigateToRole = () => {
     navigate("/layoutrole");
   };
@@ -88,6 +87,14 @@ function Layout_User() {
 
   const navigateToUser = () => {
     navigate("/layoutuser");
+  };
+
+  const novigateToSignupUser = () => {
+    navigate("/signupuser");
+  };
+
+  const navigateToCreateUser = () => {
+    navigate("/createUser");
   };
 
   const navigateLogout = async () => {
@@ -118,9 +125,7 @@ function Layout_User() {
   const fetchData = async () => {
     try {
       debugger;
-      const data = await UserService.fetchUser(
-        token
-      );
+      const data = await UserService.fetchUser(token);
       console.log("Fetched User registration:", data);
       setEmployee(data.users);
       setTotalCount(data.totalCount);
@@ -261,12 +266,23 @@ function Layout_User() {
             <Grid container spacing={2}>
               {/* Table Header */}
               <Grid item xs={12}>
-                <Paper style={{ padding: "1rem", textAlign: "center" }}>
+                <Paper style={{ padding: "1rem" }}>
                   <Typography
                     variant="h12"
                     fontFamily=' "Playwrite CU", cursive;'
                   >
                     Users
+                    <Grid item>
+                      <Paper style={{ padding: "1rem", textAlign: "right" }}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={navigateToCreateUser}
+                        >
+                          Create User
+                        </Button>
+                      </Paper>
+                    </Grid>
                   </Typography>
                 </Paper>
               </Grid>

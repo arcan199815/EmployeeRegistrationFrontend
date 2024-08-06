@@ -16,6 +16,7 @@ import SignUpUserComponent from "./Component/SignUpUserComponent";
 import SignUpPdfComponent from "./Component/SignUpPdfComponent";
 import NotFoundPage from "./Component/NotFoundPage ";
 import { ToastContainer } from "react-toastify";
+import CreateUserComponent from "./Component/CreateUserComponent";
 
 function App() {
   debugger;
@@ -57,6 +58,7 @@ function App() {
             }
           />
           <Route path="/signupuser" element={<SignUpUserComponent />} />
+          <Route path="/createuser" element={<CreateUserComponent />} />
           <Route
             path="/layout"
             element={
