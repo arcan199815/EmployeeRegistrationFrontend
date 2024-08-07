@@ -32,6 +32,7 @@ function CreateUserComponent() {
     email: "",
     password: "",
     role: "",
+    empId: "",
   });
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const [confirmpassword, setConfirmPassword] = useState("");
@@ -45,8 +46,9 @@ function CreateUserComponent() {
   const { logout } = useAuth(); //
   const [page, setPage] = useState(0); //
   const [rowsPerPage, setRowsPerPage] = useState(6); //
-  const { token } = useAuth(); 
+  const { token, role } = useAuth(); 
   const [edit, setEdit] = useState(false);
+  const [visibleBar,setVisibleBar]= useState(false);
 
   const navigateToRole = () => {
     navigate("/layoutrole");
@@ -184,6 +186,10 @@ function CreateUserComponent() {
   useEffect(() => {
     debugger;
     //contentRef.current = document.querySelector('.main');
+    if(role=="Employee")
+      {
+        setVisibleBar(true);
+      }
     setLoading(false);
     if(users){
       setEdit(true);
@@ -258,7 +264,7 @@ function CreateUserComponent() {
                 </Typography>
               </Paper>
             </Grid>
-            <Grid item xs={12}>
+            {!visibleBar &&<Grid item xs={12}>
               <Paper
                 style={{
                   padding: "1rem",
@@ -276,8 +282,8 @@ function CreateUserComponent() {
                   User
                 </Typography>
               </Paper>
-            </Grid>
-            <Grid item xs={12}>
+            </Grid>}
+            {!visibleBar && <Grid item xs={12}>
               <Paper
                 style={{
                   padding: "1rem",
@@ -295,7 +301,7 @@ function CreateUserComponent() {
                   Role
                 </Typography>
               </Paper>
-            </Grid>
+            </Grid>}
             <Grid item xs={12}>
               <Paper
                 style={{
@@ -406,6 +412,19 @@ function CreateUserComponent() {
                     autoComplete="new-password"
                   />
                 </Grid>}
+                {/* <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="empId"
+                  label="Employee Id"
+                  type="empId"
+                  id="empId"
+                  value={formData.empId}
+                  onChange={handleInputChange}
+                  //autoComplete="new-password"
+                />
+              </Grid> */}
                 <Grid item xs={12} >
                   <FormControl fullWidth required>
                     <InputLabel id="role-label">Role</InputLabel>

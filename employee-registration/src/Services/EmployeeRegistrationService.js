@@ -82,6 +82,29 @@ const fetchEmployeeRegistration = async (searchKeyword, token) => {
     }
   };
 
+const fetchEmployeeRegistrationForRmployeeRole = async (searchKeyword,email, token) => {
+    try {
+        debugger;
+        
+      const response = await axios.get(`${API_URL}EmployeeRegistration/GetEmployeeRegistrationForEmployeeRole`, {
+        params: {
+          pageSize: 100,
+          pageNumber: 1,
+          searchKeyword: searchKeyword,
+          email: email,
+        },
+        headers: {
+            Authorization: `Bearer ${token}`
+          }
+      });
+      return response.data;
+    } catch (error) {
+      // Handle error
+      console.error('Error fetching employee registration:', error);
+      throw error; // Optionally rethrow or handle as needed
+    }
+  };
+
   const fetchEmployeeRegistrationById = async (id) => {
     try {
         debugger;
@@ -106,6 +129,7 @@ return axios
 
   const EmployeeRegistrationService = {
     fetchEmployeeRegistration,
+    fetchEmployeeRegistrationForRmployeeRole,
     deleteEmployee,
     register,
     fetchEmployeeRegistrationById,

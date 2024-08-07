@@ -19,9 +19,28 @@ export const AuthProvider = ({ children }) => {
     return localStorage.getItem('isLoggedIn') === 'true';
   });
   //setIsLoggedIn(isLoggedInUser);
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-  const [role, setRole] = useState(null);
+  const storedUser = localStorage.getItem('user');
+  const [user, setUser] = useState(() => {
+    // Parse the user data from localStorage
+    return storedUser ?? null;
+  });
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem('token');
+  });
+  const [role, setRole] = useState(() => {
+    return localStorage.getItem('role');
+  });
+  const [loggedInUserEmail, setLoggedInUserEmail] = useState(() => {
+    return localStorage.getItem('email');
+  });
+
+  const [loggedInUserName, setLoggedInUserName] = useState(() => {
+    return localStorage.getItem('username');
+  });
+
+  const [loggedInUserEmpId,setLoggedInUserEmpId] = useState(() => {
+    return localStorage.getItem('empId');
+  });
 
   const login = async (formData) => {
     // Implement your login logic here
@@ -39,9 +58,18 @@ export const AuthProvider = ({ children }) => {
           localStorage.setItem("user", JSON.stringify(response.data));
           localStorage.setItem('isLoggedIn', 'true');
           localStorage.setItem('token',response.data.token);
+          localStorage.setItem('user',response.data);
+          debugger;
+          localStorage.setItem('role', response.data.roles);
+          localStorage.setItem('email', response.data.email);
+          localStorage.setItem('username', response.data.username);
+          localStorage.setItem('empId', response.data.empId);
           setIsLoggedIn(true);
           setToken(response.data.token);
           setRole(response.data.roles);
+          setLoggedInUserEmail(response.data.email);
+          setLoggedInUserName(response.data.username);
+          setLoggedInUserEmpId(response.data.empId);
           setUser(response.data);
         }
   
@@ -62,7 +90,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, user, role, token, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, user, role, token, loggedInUserEmail, loggedInUserName, loggedInUserEmpId, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

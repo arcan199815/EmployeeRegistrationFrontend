@@ -38,16 +38,17 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import AddIcon from "@mui/icons-material/Add";
 
 function Layout_User() {
-  const [isOpened, setIsOpened] = useState(true); //
+  const [isOpened, setIsOpened] = useState(true); 
   const [searchQuery, setSearchQuery] = useState(null);
-  const [employee, setEmployee] = useState([]); //
-  const [totalCount, setTotalCount] = useState(0); //
-  const [Id, setId] = useState(0); //
+  const [employee, setEmployee] = useState([]); 
+  const [totalCount, setTotalCount] = useState(0); 
+  const [Id, setId] = useState(0); 
   const navigate = useNavigate();
-  const { logout } = useAuth(); //
-  const [page, setPage] = useState(0); //
-  const [rowsPerPage, setRowsPerPage] = useState(6); //
-  const { token } = useAuth(); //
+  const { logout } = useAuth(); 
+  const [page, setPage] = useState(0); 
+  const [rowsPerPage, setRowsPerPage] = useState(6); 
+  const { token,role } = useAuth(); 
+  const [visibleBar,setVisibleBar]= useState(false);
 
   const handleChangePage = (event, newPage) => {
     debugger;
@@ -138,6 +139,10 @@ function Layout_User() {
 
   useEffect(() => {
     fetchData();
+    if(role=="Employee")
+      {
+        setVisibleBar(true);
+      }
   }, []);
 
   return (
@@ -206,7 +211,7 @@ function Layout_User() {
                 </Typography>
               </Paper>
             </Grid>
-            <Grid item xs={12}>
+            {!visibleBar &&<Grid item xs={12}>
               <Paper
                 style={{
                   padding: "1rem",
@@ -224,8 +229,8 @@ function Layout_User() {
                   User
                 </Typography>
               </Paper>
-            </Grid>
-            <Grid item xs={12}>
+            </Grid>}
+            {!visibleBar && <Grid item xs={12}>
               <Paper
                 style={{
                   padding: "1rem",
@@ -243,7 +248,7 @@ function Layout_User() {
                   Role
                 </Typography>
               </Paper>
-            </Grid>
+            </Grid>}
             <Grid item xs={12}>
               <Paper
                 style={{

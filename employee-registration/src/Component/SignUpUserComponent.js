@@ -31,6 +31,7 @@ function SignUpUserComponent() {
     email: '',
     password: '',
     role:'',
+    empId:''
   });
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
   const [confirmpassword, setConfirmPassword] = useState('');
@@ -75,6 +76,11 @@ function SignUpUserComponent() {
       toast.error("Role Required");
         return;
     }
+    if(formData.empId ==null || formData.empId == undefined || formData.empId =="")
+      {
+          toast.error("EmployeeId Required");
+          return;
+      }
 
     try {
         const userData = await AuthService.register(formData);
@@ -184,6 +190,19 @@ function SignUpUserComponent() {
                   autoComplete="new-password"
                 />
               </Grid>
+              {/* <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="empId"
+                  label="Employee Id"
+                  type="empId"
+                  id="empId"
+                  value={formData.empId}
+                  onChange={handleInputChange}
+                  //autoComplete="new-password"
+                />
+              </Grid> */}
               <Grid item xs={12} sm={6}>
               <FormControl fullWidth required>
                 <InputLabel id="role-label">Role</InputLabel>
@@ -205,6 +224,7 @@ function SignUpUserComponent() {
               </FormControl>
               </Grid>
             </Grid>
+            
             <Button
               type="submit"
               fullWidth

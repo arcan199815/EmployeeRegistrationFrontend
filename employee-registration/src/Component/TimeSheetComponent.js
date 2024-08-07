@@ -4,6 +4,8 @@ import {
   AccordionSummary,
   AccordionDetails,
   TablePagination,
+  Toolbar,
+  IconButton,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Avatar from "@mui/material/Avatar";
@@ -34,8 +36,9 @@ import EditIcon from "@mui/icons-material/Edit"; // Import EditIcon from Materia
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
+import { format, startOfWeek, endOfWeek, addDays } from 'date-fns';
 
-function Layout_Role() {
+function TimeSheetComponent() {
   const [isOpened, setIsOpened] = useState(true); //
   const [searchQuery, setSearchQuery] = useState(null);
   const [employee, setEmployee] = useState([]); //
@@ -47,10 +50,76 @@ function Layout_Role() {
   const [rowsPerPage, setRowsPerPage] = useState(5); //
   const { token, role } = useAuth(); //
   const [visibleBar,setVisibleBar]= useState(false);
+  const [data, setData] = useState([]);
+  const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const [startDate, setStartDate] = useState(format(startOfWeek(new Date()), 'yyyy-MM-dd')); // Default to current week
+  const [endDate, setEndDate] = useState(format(endOfWeek(new Date()), 'yyyy-MM-dd')); // Default to current week
+  const dummyData = [
+    {
+      id: 1,
+      employeeName: "John Doe",
+      timesheet: {
+        Mon: "8h",
+        Tue: "7.5h",
+        Wed: "8h",
+        Thu: "8h",
+        Fri: "7h",
+        Sat: "-",
+        Sun: "-"
+      }
+    },
+    {
+      id: 2,
+      employeeName: "Jane Smith",
+      timesheet: {
+        Mon: "7h",
+        Tue: "8h",
+        Wed: "7.5h",
+        Thu: "8h",
+        Fri: "7h",
+        Sat: "6h",
+        Sun: "-"
+      }
+    },
+    {
+      id: 3,
+      employeeName: "Alice Johnson",
+      timesheet: {
+        Mon: "8h",
+        Tue: "8h",
+        Wed: "8h",
+        Thu: "8h",
+        Fri: "8h",
+        Sat: "5h",
+        Sun: "4h"
+      }
+    },
+    {
+      id: 4,
+      employeeName: "Bob Brown",
+      timesheet: {
+        Mon: "7.5h",
+        Tue: "7h",
+        Wed: "7h",
+        Thu: "7.5h",
+        Fri: "8h",
+        Sat: "-",
+        Sun: "-"
+      }
+    },
+    // Add more dummy entries as needed
+  ];
 
   const handleChangePage = (event, newPage) => {
     debugger;
     setPage(newPage);
+  };
+
+  const handleStartDateChange = (event) => {
+    const selectedDate = new Date(event.target.value);
+    const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 }); // Start on Monday
+    setStartDate(format(weekStart, 'yyyy-MM-dd'));
+    setEndDate(format(endOfWeek(weekStart), 'yyyy-MM-dd'));
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -117,16 +186,11 @@ function Layout_Role() {
 
   const fetchData = async () => {
     try {
-      debugger;
-      const data = await UserService.fetchRole(
-        token
-      );
-      console.log("Fetched Role:", data);
-      setEmployee(data.userRoles);
-      setTotalCount(data.totalCount);
-    } catch (error) {
-      console.error("Error fetching Role:", error);
-    }
+        setData(dummyData);  // Set dummy data directly
+        setTotalCount(dummyData.length);  // Set the total count
+      } catch (error) {
+        console.error("Error fetching timesheet data:", error);
+      }
   };
 
   const deleteData = async (rowData) => {
@@ -143,11 +207,11 @@ function Layout_Role() {
   };
 
   useEffect(() => {
-    if(role=="Employee")
-      {
-        setVisibleBar(true);
-      }
     fetchData();
+    const today = new Date();
+    const startOfWeekDate = startOfWeek(today, { weekStartsOn: 1 }); // Start on Monday
+    setStartDate(startOfWeekDate);
+    const endOfWeekDate = endOfWeek(startOfWeekDate);
   }, []);
 
   return (
@@ -276,76 +340,91 @@ function Layout_Role() {
             </Grid>
           </aside>
           <main className="main">
-            <Grid container spacing={2}>
-              {/* Table Header */}
-              <Grid item xs={12}>
-                <Paper style={{ padding: "1rem", textAlign: "center" }}>
-                  <Typography
-                    variant="h12"
-                    fontFamily=' "Playwrite CU", cursive;'
-                  >
-                    Roles
-                  </Typography>
-                </Paper>
-              </Grid>
-              {/* <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  id="search"
-                  label="Search Employee"
-                  variant="outlined"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                />
-              </Grid> */}
-            </Grid>
-            <TableContainer
-              component={Paper}
-              fontFamily=' "Playwrite CU", cursive;'
-            >
-              <Table style={{ fontFamily: '"Playwrite CU", cursive' }}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Action</TableCell>
-                    <TableCell>Role Name</TableCell>
-                    <TableCell>Role Description</TableCell>
+          <Typography variant="h4" gutterBottom>
+        Weekly Timesheets
+      </Typography>
+      <TextField
+        type="date"
+        label="Start Date (Monday)"
+        value={startDate}
+        onChange={handleStartDateChange}
+        style={{ marginBottom: '1rem', width: '100%' }}
+        InputLabelProps={{ shrink: true }}
+      />
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => navigate('/add-timesheet')}
+      >
+        Add New Timesheet
+      </Button>
+      <Box sx={{ marginTop: 2 }}>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Employee</TableCell>
+                {/* Display days from startDate to endDate */}
+                {Array.from({ length: 7 }).map((_, index) => {
+                  const date = addDays(new Date(startDate), index);
+                  return (
+                    <TableCell key={date.toISOString()} align="center">
+                      {format(date, 'EEE')}
+                    </TableCell>
+                  );
+                })}
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data.length > 0 ? (
+                data.map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell>{row.employeeName}</TableCell>
+                    {Array.from({ length: 7 }).map((_, index) => {
+                      const date = addDays(new Date(startDate), index);
+                      return (
+                        <TableCell key={date.toISOString()} align="center">
+                          {row.timesheet[format(date, 'EEE')] || "-"}
+                        </TableCell>
+                      );
+                    })}
+                    <TableCell>
+                      <IconButton 
+                      //onClick={() => handleEdit(row)}
+                      >
+                        <EditIcon color="primary" />
+                      </IconButton>
+                      <IconButton 
+                      //onClick={() => handleDelete(row)}
+                      >
+                        <DeleteIcon color="error" />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
-                </TableHead>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={9} align="center">
+                    No records found
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={totalCount}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          style={{ marginTop: '1rem' }}
+        />
+      </Box>
 
-                <TableBody>
-                  {(rowsPerPage > 0
-                    ? employee.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                    : employee
-                  ).map((row) => (
-                    <TableRow key={row.id}>
-                      <TableCell>
-                        <span style={{ display: "flex", alignItems: "center" }}>
-                          <DeleteIcon
-                            style={{ cursor: "pointer", fontSize: "20px" }}
-                            onClick={() => deleteData(row)}
-                          />{" "}
-                        </span>
-                      </TableCell>
-                      <TableCell>{row.vroleName}</TableCell>
-                      <TableCell>{row.vroleDescription}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>{" "}
-
-              </Table>
-              <TablePagination
-                rowsPerPageOptions={5} // Options for rows per page dropdown
-                component="div"
-                count={totalCount} // Total number of rows
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
-            </TableContainer>
           </main>
         </div>
         <div className="footer">
@@ -360,4 +439,4 @@ function Layout_Role() {
   );
 }
 
-export default Layout_Role;
+export default TimeSheetComponent;

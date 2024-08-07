@@ -45,7 +45,9 @@ function Layout() {
   const { logout } = useAuth();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const { token } = useAuth();
+  const { token,role,user,loggedInUserEmail } = useAuth();
+  const [data,setData] = useState(null);
+  const [visibleBar,setVisibleBar]= useState(false);
 
   const handleChangePage = (event, newPage) => {
     debugger;
@@ -117,21 +119,35 @@ function Layout() {
   const fetchData = async () => {
     try {
       debugger;
-      const data = await EmployeeRegistrationService.fetchEmployeeRegistration(
+      let data1;
+      if(role=='Admin'){
+       data1=(await EmployeeRegistrationService.fetchEmployeeRegistration(
         searchQuery,
         token
-      );
-      console.log("Fetched employee registration:", data);
-      setEmployee(data.employees);
-      setTotalCount(data.totalCount);
+      ));}
+      else if(role=='Employee')
+      {
+         data1=(await EmployeeRegistrationService.fetchEmployeeRegistrationForRmployeeRole(
+          searchQuery,
+          loggedInUserEmail,
+          token
+        ));
+      }
+      console.log("Fetched employee registration:", data1);
+      setEmployee(data1.employees);
+      setTotalCount(data1.totalCount);
     } catch (error) {
       console.error("Error fetching employee registration:", error);
     }
   };
 
   useEffect(() => {
+    if(role=="Employee")
+      {
+        setVisibleBar(true);
+      }
     fetchData();
-  }, []);
+  }, [role]);
 
   return (
     <>
@@ -199,7 +215,7 @@ function Layout() {
                 </Typography>
               </Paper>
             </Grid>
-            <Grid item xs={12}>
+            {!visibleBar && <Grid item xs={12}>
               <Paper
                 style={{
                   padding: "1rem",
@@ -217,8 +233,8 @@ function Layout() {
                   User
                 </Typography>
               </Paper>
-            </Grid>
-            <Grid item xs={12}>
+            </Grid>}
+            {!visibleBar && <Grid item xs={12}>
               <Paper
                 style={{
                   padding: "1rem",
@@ -236,7 +252,7 @@ function Layout() {
                   Role
                 </Typography>
               </Paper>
-            </Grid>
+            </Grid>}
             <Grid item xs={12}>
               <Paper
                 style={{
@@ -266,11 +282,11 @@ function Layout() {
                     variant="h12"
                     fontFamily=' "Playwrite CU", cursive;'
                   >
-                    Employees
+                    {!visibleBar?'Employees':'Personal Details'}
                   </Typography>
                 </Paper>
               </Grid>
-              <Grid item xs={12}>
+              {!visibleBar &&<Grid item xs={12}>
                 <TextField
                   fullWidth
                   id="search"
@@ -279,7 +295,7 @@ function Layout() {
                   value={searchQuery}
                   onChange={handleSearchChange}
                 />
-              </Grid>
+              </Grid>}
             </Grid>
             <TableContainer
               component={Paper}
@@ -332,7 +348,7 @@ function Layout() {
                   ))}
                 </TableBody>
               </Table>
-              <TablePagination
+              {!visibleBar && <TablePagination
                 rowsPerPageOptions={5} // Options for rows per page dropdown
                 component="div"
                 count={totalCount} // Total number of rows
@@ -340,7 +356,7 @@ function Layout() {
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
-              />
+              />}
             </TableContainer>
           </main>
         </div>

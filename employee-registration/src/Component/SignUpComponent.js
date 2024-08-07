@@ -35,7 +35,7 @@ function SignUpComponent() {
   const navigate = useNavigate();
   const [showPdf, setShowPdf] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState(false);
-  const { logout } = useAuth();
+  const { logout,user,role, loggedInUserEmail, loggedInUserName } = useAuth();
   const location = useLocation();
   const { employees } = location.state|| {};
   const [address, setAddress] = useState([]);
@@ -46,7 +46,9 @@ function SignUpComponent() {
   const dateInputRef = useRef(null);
   const dateInputRef1 = useRef(null);
   const contentRef = useRef(null);
-
+  const [disabledForEmployee, setDisabledForEmployee] = useState(false);
+  const [disabledForEmployeeId, setDisabledForEmployeeId] = useState(false);
+  const [visibleBar,setVisibleBar]= useState(false);
   const [formData, setFormData] = useState({
     employeeRegistrationID: 0,
     empName: '',
@@ -298,10 +300,21 @@ function SignUpComponent() {
       debugger;
       //contentRef.current = document.querySelector('.main');
       setLoading(false);
+      if(role=="Employee"){
+        setVisibleBar(true);
+        setDisabledForEmployee(true);
+        console.log(user);
+        setFormData({
+          empName: loggedInUserName,
+          empEmailId: loggedInUserEmail,
+        })
+      }
       if(employees){
+        setDisabledForEmployeeId(true);
         setEdit(true);
       fetchDataById(); // Set loading to false once initialization is done
       }
+      
     }, [contentRef]);
   
     if (loading) {
@@ -337,7 +350,7 @@ function SignUpComponent() {
           <Typography variant="h14" color='#090305' fontFamily=' "Playwrite CU", cursive;'>Employee Registration</Typography>
         </Paper>
       </Grid>
-      <Grid item xs={12}>
+      {!visibleBar &&<Grid item xs={12}>
               <Paper
                 style={{
                   padding: "1rem",
@@ -355,8 +368,8 @@ function SignUpComponent() {
                   User
                 </Typography>
               </Paper>
-            </Grid>
-            <Grid item xs={12}>
+            </Grid>}
+            {!visibleBar && <Grid item xs={12}>
               <Paper
                 style={{
                   padding: "1rem",
@@ -374,7 +387,7 @@ function SignUpComponent() {
                   Role
                 </Typography>
               </Paper>
-            </Grid>
+            </Grid>}
       <Grid item xs={12}>
       <Paper style={{ padding: '1rem', textAlign: 'center', background: '#adaaaa', cursor: 'pointer' }} onClick={navigateLogout}>
           <Typography variant="h14" color='#090305' fontFamily=' "Playwrite CU", cursive;'>Logout</Typography>
@@ -412,6 +425,7 @@ function SignUpComponent() {
                   id="empName"
                   value={formData.empName}
                   onChange={handleInputChange}
+                  disabled={disabledForEmployee}
                   label="Employee Name"
                   autoFocus
                 />
@@ -422,6 +436,7 @@ function SignUpComponent() {
                   fullWidth
                   id="empId"
                   value={formData.empId}
+                  disabled={disabledForEmployeeId}
                   onChange={handleInputChange}
                   label="Employee Id"
                   name="empId"
@@ -434,6 +449,7 @@ function SignUpComponent() {
                   fullWidth
                   id="empEmailId"
                   value={formData.empEmailId}
+                  disabled={disabledForEmployee}
                   onChange={handleInputChange}
                   label="Email Address"
                   name="empEmailId"

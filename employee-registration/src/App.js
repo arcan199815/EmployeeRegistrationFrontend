@@ -17,6 +17,8 @@ import SignUpPdfComponent from "./Component/SignUpPdfComponent";
 import NotFoundPage from "./Component/NotFoundPage ";
 import { ToastContainer } from "react-toastify";
 import CreateUserComponent from "./Component/CreateUserComponent";
+import TimeSheetComponent from "./Component/TimeSheetComponent";
+import AddTimesheetComponent from "./Component/AddTimesheetComponent";
 
 function App() {
   debugger;
@@ -59,6 +61,16 @@ function App() {
           />
           <Route path="/signupuser" element={<SignUpUserComponent />} />
           <Route path="/createuser" element={<CreateUserComponent />} />
+          <Route path="/timesheet" element={<TimeSheetComponent />} />
+          <Route path="/add-timesheet" element={<AddTimesheetComponent />} />
+          <Route path="/edit-timesheet" element={<AddTimesheetComponent />} />
+          {/* <Route
+            path="/timesheet"
+            element={
+              isLoggedIn ? <TimeSheetComponent /> : <Navigate to="/notfoundpage" replace />
+            }
+          /> */}
+
           <Route
             path="/layout"
             element={
