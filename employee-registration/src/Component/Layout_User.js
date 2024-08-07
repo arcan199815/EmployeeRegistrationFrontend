@@ -38,17 +38,17 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import AddIcon from "@mui/icons-material/Add";
 
 function Layout_User() {
-  const [isOpened, setIsOpened] = useState(true); 
+  const [isOpened, setIsOpened] = useState(true);
   const [searchQuery, setSearchQuery] = useState(null);
-  const [employee, setEmployee] = useState([]); 
-  const [totalCount, setTotalCount] = useState(0); 
-  const [Id, setId] = useState(0); 
+  const [employee, setEmployee] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [Id, setId] = useState(0);
   const navigate = useNavigate();
-  const { logout } = useAuth(); 
-  const [page, setPage] = useState(0); 
-  const [rowsPerPage, setRowsPerPage] = useState(6); 
-  const { token,role } = useAuth(); 
-  const [visibleBar,setVisibleBar]= useState(false);
+  const { logout } = useAuth();
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(6);
+  const { token, role } = useAuth();
+  const [visibleBar, setVisibleBar] = useState(false);
 
   const handleChangePage = (event, newPage) => {
     debugger;
@@ -88,6 +88,10 @@ function Layout_User() {
     navigate("/layout");
   };
 
+  const navigateToTimeSheet = () => {
+    navigate("/timesheet");
+  };
+
   const navigateToUser = () => {
     navigate("/layoutuser");
   };
@@ -111,9 +115,7 @@ function Layout_User() {
   const deleteData = async (rowData) => {
     debugger;
     try {
-      await UserService.deleteUser(
-        rowData.iuserId
-      );
+      await UserService.deleteUser(rowData.iuserId);
       console.log("Records Deleted successfully");
       window.location.reload();
     } catch (error) {
@@ -139,10 +141,9 @@ function Layout_User() {
 
   useEffect(() => {
     fetchData();
-    if(role=="Employee")
-      {
-        setVisibleBar(true);
-      }
+    if (role == "Employee") {
+      setVisibleBar(true);
+    }
   }, []);
 
   return (
@@ -192,6 +193,26 @@ function Layout_User() {
                 </Typography>
               </Paper>
             </Grid>
+
+            <Grid item xs={12}>
+              <Paper
+                style={{
+                  padding: "1rem",
+                  textAlign: "center",
+                  background: "#adaaaa",
+                  cursor: "pointer",
+                }}
+                onClick={navigateToTimeSheet}
+              >
+                <Typography
+                  variant="h14"
+                  color="#090305"
+                  fontFamily=' "Playwrite CU", cursive;'
+                >
+                  Time Sheet
+                </Typography>
+              </Paper>
+            </Grid>
             <Grid item xs={12}>
               <Paper
                 style={{
@@ -211,44 +232,48 @@ function Layout_User() {
                 </Typography>
               </Paper>
             </Grid>
-            {!visibleBar &&<Grid item xs={12}>
-              <Paper
-                style={{
-                  padding: "1rem",
-                  textAlign: "center",
-                  background: "#adaaaa",
-                  cursor: "pointer",
-                }}
-                onClick={navigateToUser}
-              >
-                <Typography
-                  variant="h14"
-                  color="#090305"
-                  fontFamily=' "Playwrite CU", cursive;'
+            {!visibleBar && (
+              <Grid item xs={12}>
+                <Paper
+                  style={{
+                    padding: "1rem",
+                    textAlign: "center",
+                    background: "#adaaaa",
+                    cursor: "pointer",
+                  }}
+                  onClick={navigateToUser}
                 >
-                  User
-                </Typography>
-              </Paper>
-            </Grid>}
-            {!visibleBar && <Grid item xs={12}>
-              <Paper
-                style={{
-                  padding: "1rem",
-                  textAlign: "center",
-                  background: "#adaaaa",
-                  cursor: "pointer",
-                }}
-                onClick={navigateToRole}
-              >
-                <Typography
-                  variant="h14"
-                  color="#090305"
-                  fontFamily=' "Playwrite CU", cursive;'
+                  <Typography
+                    variant="h14"
+                    color="#090305"
+                    fontFamily=' "Playwrite CU", cursive;'
+                  >
+                    User
+                  </Typography>
+                </Paper>
+              </Grid>
+            )}
+            {!visibleBar && (
+              <Grid item xs={12}>
+                <Paper
+                  style={{
+                    padding: "1rem",
+                    textAlign: "center",
+                    background: "#adaaaa",
+                    cursor: "pointer",
+                  }}
+                  onClick={navigateToRole}
                 >
-                  Role
-                </Typography>
-              </Paper>
-            </Grid>}
+                  <Typography
+                    variant="h14"
+                    color="#090305"
+                    fontFamily=' "Playwrite CU", cursive;'
+                  >
+                    Role
+                  </Typography>
+                </Paper>
+              </Grid>
+            )}
             <Grid item xs={12}>
               <Paper
                 style={{
@@ -270,33 +295,33 @@ function Layout_User() {
             </Grid>
           </aside>
           <main className="main">
-          <Grid container spacing={2}>
-  {/* Table Header */}
-  <Grid item xs={12}>
-    <Paper style={{ padding: "1rem" }}>
-      <Grid container alignItems="center" spacing={1}>
-        <Grid item>
-          {/* <Typography
+            <Grid container spacing={2}>
+              {/* Table Header */}
+              <Grid item xs={12}>
+                <Paper style={{ padding: "1rem" }}>
+                  <Grid container alignItems="center" spacing={1}>
+                    <Grid item>
+                      {/* <Typography
             variant="h6"
             fontFamily='"Playwrite CU", cursive'
           >
             Users
           </Typography> */}
-        </Grid>
-        <Grid item>
-          <AddIcon
-            style={{
-              cursor: "pointer",
-              fontSize: 32, // Adjust size as needed
-              color: "primary", // Adjust color as needed
-            }}
-            onClick={navigateToCreateUser} // Attach click event
-          />
-        </Grid>
-      </Grid>
-    </Paper>
-  </Grid>
-</Grid>
+                    </Grid>
+                    <Grid item>
+                      <AddIcon
+                        style={{
+                          cursor: "pointer",
+                          fontSize: 32, // Adjust size as needed
+                          color: "primary", // Adjust color as needed
+                        }}
+                        onClick={navigateToCreateUser} // Attach click event
+                      />
+                    </Grid>
+                  </Grid>
+                </Paper>
+              </Grid>
+            </Grid>
 
             <TableContainer
               component={Paper}
@@ -322,7 +347,7 @@ function Layout_User() {
                     <TableRow key={row.id}>
                       <TableCell>
                         <span style={{ display: "flex", alignItems: "center" }}>
-                        <VisibilityIcon
+                          <VisibilityIcon
                             style={{
                               cursor: "pointer",
                               marginRight: "10px",

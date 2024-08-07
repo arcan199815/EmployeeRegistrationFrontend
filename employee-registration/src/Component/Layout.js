@@ -45,9 +45,9 @@ function Layout() {
   const { logout } = useAuth();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const { token,role,user,loggedInUserEmail } = useAuth();
-  const [data,setData] = useState(null);
-  const [visibleBar,setVisibleBar]= useState(false);
+  const { token, role, user, loggedInUserEmail } = useAuth();
+  const [data, setData] = useState(null);
+  const [visibleBar, setVisibleBar] = useState(false);
 
   const handleChangePage = (event, newPage) => {
     debugger;
@@ -91,6 +91,10 @@ function Layout() {
     navigate("/layout");
   };
 
+  const navigateToTimeSheet = () => {
+    navigate("/timesheet");
+  };
+
   const navigateLogout = async () => {
     debugger;
     await logout();
@@ -120,18 +124,18 @@ function Layout() {
     try {
       debugger;
       let data1;
-      if(role=='Admin'){
-       data1=(await EmployeeRegistrationService.fetchEmployeeRegistration(
-        searchQuery,
-        token
-      ));}
-      else if(role=='Employee')
-      {
-         data1=(await EmployeeRegistrationService.fetchEmployeeRegistrationForRmployeeRole(
+      if (role == "Admin") {
+        data1 = await EmployeeRegistrationService.fetchEmployeeRegistration(
           searchQuery,
-          loggedInUserEmail,
           token
-        ));
+        );
+      } else if (role == "Employee") {
+        data1 =
+          await EmployeeRegistrationService.fetchEmployeeRegistrationForRmployeeRole(
+            searchQuery,
+            loggedInUserEmail,
+            token
+          );
       }
       console.log("Fetched employee registration:", data1);
       setEmployee(data1.employees);
@@ -142,10 +146,9 @@ function Layout() {
   };
 
   useEffect(() => {
-    if(role=="Employee")
-      {
-        setVisibleBar(true);
-      }
+    if (role == "Employee") {
+      setVisibleBar(true);
+    }
     fetchData();
   }, [role]);
 
@@ -204,6 +207,26 @@ function Layout() {
                   background: "#adaaaa",
                   cursor: "pointer",
                 }}
+                onClick={navigateToTimeSheet}
+              >
+                <Typography
+                  variant="h14"
+                  color="#090305"
+                  fontFamily=' "Playwrite CU", cursive;'
+                >
+                  Time Sheet
+                </Typography>
+              </Paper>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Paper
+                style={{
+                  padding: "1rem",
+                  textAlign: "center",
+                  background: "#adaaaa",
+                  cursor: "pointer",
+                }}
                 onClick={navigateToEmployeeRegistration}
               >
                 <Typography
@@ -215,44 +238,48 @@ function Layout() {
                 </Typography>
               </Paper>
             </Grid>
-            {!visibleBar && <Grid item xs={12}>
-              <Paper
-                style={{
-                  padding: "1rem",
-                  textAlign: "center",
-                  background: "#adaaaa",
-                  cursor: "pointer",
-                }}
-                onClick={navigateToUser}
-              >
-                <Typography
-                  variant="h14"
-                  color="#090305"
-                  fontFamily=' "Playwrite CU", cursive;'
+            {!visibleBar && (
+              <Grid item xs={12}>
+                <Paper
+                  style={{
+                    padding: "1rem",
+                    textAlign: "center",
+                    background: "#adaaaa",
+                    cursor: "pointer",
+                  }}
+                  onClick={navigateToUser}
                 >
-                  User
-                </Typography>
-              </Paper>
-            </Grid>}
-            {!visibleBar && <Grid item xs={12}>
-              <Paper
-                style={{
-                  padding: "1rem",
-                  textAlign: "center",
-                  background: "#adaaaa",
-                  cursor: "pointer",
-                }}
-                onClick={navigateToRole}
-              >
-                <Typography
-                  variant="h14"
-                  color="#090305"
-                  fontFamily=' "Playwrite CU", cursive;'
+                  <Typography
+                    variant="h14"
+                    color="#090305"
+                    fontFamily=' "Playwrite CU", cursive;'
+                  >
+                    User
+                  </Typography>
+                </Paper>
+              </Grid>
+            )}
+            {!visibleBar && (
+              <Grid item xs={12}>
+                <Paper
+                  style={{
+                    padding: "1rem",
+                    textAlign: "center",
+                    background: "#adaaaa",
+                    cursor: "pointer",
+                  }}
+                  onClick={navigateToRole}
                 >
-                  Role
-                </Typography>
-              </Paper>
-            </Grid>}
+                  <Typography
+                    variant="h14"
+                    color="#090305"
+                    fontFamily=' "Playwrite CU", cursive;'
+                  >
+                    Role
+                  </Typography>
+                </Paper>
+              </Grid>
+            )}
             <Grid item xs={12}>
               <Paper
                 style={{
@@ -282,20 +309,22 @@ function Layout() {
                     variant="h12"
                     fontFamily=' "Playwrite CU", cursive;'
                   >
-                    {!visibleBar?'Employees':'Personal Details'}
+                    {!visibleBar ? "Employees" : "Personal Details"}
                   </Typography>
                 </Paper>
               </Grid>
-              {!visibleBar &&<Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  id="search"
-                  label="Search Employee"
-                  variant="outlined"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                />
-              </Grid>}
+              {!visibleBar && (
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="search"
+                    label="Search Employee"
+                    variant="outlined"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                  />
+                </Grid>
+              )}
             </Grid>
             <TableContainer
               component={Paper}
@@ -348,15 +377,17 @@ function Layout() {
                   ))}
                 </TableBody>
               </Table>
-              {!visibleBar && <TablePagination
-                rowsPerPageOptions={5} // Options for rows per page dropdown
-                component="div"
-                count={totalCount} // Total number of rows
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />}
+              {!visibleBar && (
+                <TablePagination
+                  rowsPerPageOptions={5} // Options for rows per page dropdown
+                  component="div"
+                  count={totalCount} // Total number of rows
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              )}
             </TableContainer>
           </main>
         </div>

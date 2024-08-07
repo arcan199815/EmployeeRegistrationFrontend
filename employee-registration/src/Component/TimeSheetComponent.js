@@ -36,7 +36,7 @@ import EditIcon from "@mui/icons-material/Edit"; // Import EditIcon from Materia
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
-import { format, startOfWeek, endOfWeek, addDays } from 'date-fns';
+import { format, startOfWeek, endOfWeek, addDays } from "date-fns";
 
 function TimeSheetComponent() {
   const [isOpened, setIsOpened] = useState(true); //
@@ -49,11 +49,15 @@ function TimeSheetComponent() {
   const [page, setPage] = useState(0); //
   const [rowsPerPage, setRowsPerPage] = useState(5); //
   const { token, role } = useAuth(); //
-  const [visibleBar,setVisibleBar]= useState(false);
+  const [visibleBar, setVisibleBar] = useState(false);
   const [data, setData] = useState([]);
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  const [startDate, setStartDate] = useState(format(startOfWeek(new Date()), 'yyyy-MM-dd')); // Default to current week
-  const [endDate, setEndDate] = useState(format(endOfWeek(new Date()), 'yyyy-MM-dd')); // Default to current week
+  const [startDate, setStartDate] = useState(
+    format(startOfWeek(new Date()), "yyyy-MM-dd")
+  ); // Default to current week
+  const [endDate, setEndDate] = useState(
+    format(endOfWeek(new Date()), "yyyy-MM-dd")
+  ); // Default to current week
   const dummyData = [
     {
       id: 1,
@@ -65,8 +69,8 @@ function TimeSheetComponent() {
         Thu: "8h",
         Fri: "7h",
         Sat: "-",
-        Sun: "-"
-      }
+        Sun: "-",
+      },
     },
     {
       id: 2,
@@ -78,8 +82,8 @@ function TimeSheetComponent() {
         Thu: "8h",
         Fri: "7h",
         Sat: "6h",
-        Sun: "-"
-      }
+        Sun: "-",
+      },
     },
     {
       id: 3,
@@ -91,8 +95,8 @@ function TimeSheetComponent() {
         Thu: "8h",
         Fri: "8h",
         Sat: "5h",
-        Sun: "4h"
-      }
+        Sun: "4h",
+      },
     },
     {
       id: 4,
@@ -104,8 +108,8 @@ function TimeSheetComponent() {
         Thu: "7.5h",
         Fri: "8h",
         Sat: "-",
-        Sun: "-"
-      }
+        Sun: "-",
+      },
     },
     // Add more dummy entries as needed
   ];
@@ -118,8 +122,8 @@ function TimeSheetComponent() {
   const handleStartDateChange = (event) => {
     const selectedDate = new Date(event.target.value);
     const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 }); // Start on Monday
-    setStartDate(format(weekStart, 'yyyy-MM-dd'));
-    setEndDate(format(endOfWeek(weekStart), 'yyyy-MM-dd'));
+    setStartDate(format(weekStart, "yyyy-MM-dd"));
+    setEndDate(format(endOfWeek(weekStart), "yyyy-MM-dd"));
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -159,6 +163,10 @@ function TimeSheetComponent() {
     navigate("/layout");
   };
 
+  const navigateToTimeSheet = () => {
+    navigate("/timesheet");
+  };
+
   const navigateLogout = async () => {
     debugger;
     await logout();
@@ -186,19 +194,17 @@ function TimeSheetComponent() {
 
   const fetchData = async () => {
     try {
-        setData(dummyData);  // Set dummy data directly
-        setTotalCount(dummyData.length);  // Set the total count
-      } catch (error) {
-        console.error("Error fetching timesheet data:", error);
-      }
+      setData(dummyData); // Set dummy data directly
+      setTotalCount(dummyData.length); // Set the total count
+    } catch (error) {
+      console.error("Error fetching timesheet data:", error);
+    }
   };
 
   const deleteData = async (rowData) => {
     debugger;
     try {
-      await UserService.deleteRole(
-        rowData.iroleId
-      );
+      await UserService.deleteRole(rowData.iroleId);
       console.log("Records Deleted successfully");
       window.location.reload();
     } catch (error) {
@@ -261,6 +267,27 @@ function TimeSheetComponent() {
                 </Typography>
               </Paper>
             </Grid>
+
+            <Grid item xs={12}>
+              <Paper
+                style={{
+                  padding: "1rem",
+                  textAlign: "center",
+                  background: "#adaaaa",
+                  cursor: "pointer",
+                }}
+                onClick={navigateToTimeSheet}
+              >
+                <Typography
+                  variant="h14"
+                  color="#090305"
+                  fontFamily=' "Playwrite CU", cursive;'
+                >
+                  Time Sheet
+                </Typography>
+              </Paper>
+            </Grid>
+
             <Grid item xs={12}>
               <Paper
                 style={{
@@ -280,44 +307,48 @@ function TimeSheetComponent() {
                 </Typography>
               </Paper>
             </Grid>
-            {!visibleBar && <Grid item xs={12}>
-              <Paper
-                style={{
-                  padding: "1rem",
-                  textAlign: "center",
-                  background: "#adaaaa",
-                  cursor: "pointer",
-                }}
-                onClick={navigateToUser}
-              >
-                <Typography
-                  variant="h14"
-                  color="#090305"
-                  fontFamily=' "Playwrite CU", cursive;'
+            {!visibleBar && (
+              <Grid item xs={12}>
+                <Paper
+                  style={{
+                    padding: "1rem",
+                    textAlign: "center",
+                    background: "#adaaaa",
+                    cursor: "pointer",
+                  }}
+                  onClick={navigateToUser}
                 >
-                  User
-                </Typography>
-              </Paper>
-            </Grid>}
-            {!visibleBar && <Grid item xs={12}>
-              <Paper
-                style={{
-                  padding: "1rem",
-                  textAlign: "center",
-                  background: "#adaaaa",
-                  cursor: "pointer",
-                }}
-                onClick={navigateToRole}
-              >
-                <Typography
-                  variant="h14"
-                  color="#090305"
-                  fontFamily=' "Playwrite CU", cursive;'
+                  <Typography
+                    variant="h14"
+                    color="#090305"
+                    fontFamily=' "Playwrite CU", cursive;'
+                  >
+                    User
+                  </Typography>
+                </Paper>
+              </Grid>
+            )}
+            {!visibleBar && (
+              <Grid item xs={12}>
+                <Paper
+                  style={{
+                    padding: "1rem",
+                    textAlign: "center",
+                    background: "#adaaaa",
+                    cursor: "pointer",
+                  }}
+                  onClick={navigateToRole}
                 >
-                  Role
-                </Typography>
-              </Paper>
-            </Grid>}
+                  <Typography
+                    variant="h14"
+                    color="#090305"
+                    fontFamily=' "Playwrite CU", cursive;'
+                  >
+                    Role
+                  </Typography>
+                </Paper>
+              </Grid>
+            )}
 
             <Grid item xs={12}>
               <Paper
@@ -340,91 +371,93 @@ function TimeSheetComponent() {
             </Grid>
           </aside>
           <main className="main">
-          <Typography variant="h4" gutterBottom>
-        Weekly Timesheets
-      </Typography>
-      <TextField
-        type="date"
-        label="Start Date (Monday)"
-        value={startDate}
-        onChange={handleStartDateChange}
-        style={{ marginBottom: '1rem', width: '100%' }}
-        InputLabelProps={{ shrink: true }}
-      />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => navigate('/add-timesheet')}
-      >
-        Add New Timesheet
-      </Button>
-      <Box sx={{ marginTop: 2 }}>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Employee</TableCell>
-                {/* Display days from startDate to endDate */}
-                {Array.from({ length: 7 }).map((_, index) => {
-                  const date = addDays(new Date(startDate), index);
-                  return (
-                    <TableCell key={date.toISOString()} align="center">
-                      {format(date, 'EEE')}
-                    </TableCell>
-                  );
-                })}
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data.length > 0 ? (
-                data.map((row) => (
-                  <TableRow key={row.id}>
-                    <TableCell>{row.employeeName}</TableCell>
-                    {Array.from({ length: 7 }).map((_, index) => {
-                      const date = addDays(new Date(startDate), index);
-                      return (
-                        <TableCell key={date.toISOString()} align="center">
-                          {row.timesheet[format(date, 'EEE')] || "-"}
+            <Typography variant="h4" gutterBottom>
+              Weekly Timesheets
+            </Typography>
+            <TextField
+              type="date"
+              label="Start Date (Monday)"
+              value={startDate}
+              onChange={handleStartDateChange}
+              style={{ marginBottom: "1rem", width: "100%" }}
+              InputLabelProps={{ shrink: true }}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => navigate("/add-timesheet")}
+            >
+              Add New Timesheet
+            </Button>
+            <Box sx={{ marginTop: 2 }}>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Employee</TableCell>
+                      {/* Display days from startDate to endDate */}
+                      {Array.from({ length: 7 }).map((_, index) => {
+                        const date = addDays(new Date(startDate), index);
+                        return (
+                          <TableCell key={date.toISOString()} align="center">
+                            {format(date, "EEE")}
+                          </TableCell>
+                        );
+                      })}
+                      <TableCell>Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {data.length > 0 ? (
+                      data.map((row) => (
+                        <TableRow key={row.id}>
+                          <TableCell>{row.employeeName}</TableCell>
+                          {Array.from({ length: 7 }).map((_, index) => {
+                            const date = addDays(new Date(startDate), index);
+                            return (
+                              <TableCell
+                                key={date.toISOString()}
+                                align="center"
+                              >
+                                {row.timesheet[format(date, "EEE")] || "-"}
+                              </TableCell>
+                            );
+                          })}
+                          <TableCell>
+                            <IconButton
+                            //onClick={() => handleEdit(row)}
+                            >
+                              <EditIcon color="primary" />
+                            </IconButton>
+                            <IconButton
+                            //onClick={() => handleDelete(row)}
+                            >
+                              <DeleteIcon color="error" />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={9} align="center">
+                          No records found
                         </TableCell>
-                      );
-                    })}
-                    <TableCell>
-                      <IconButton 
-                      //onClick={() => handleEdit(row)}
-                      >
-                        <EditIcon color="primary" />
-                      </IconButton>
-                      <IconButton 
-                      //onClick={() => handleDelete(row)}
-                      >
-                        <DeleteIcon color="error" />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={9} align="center">
-                    No records found
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={totalCount}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          style={{ marginTop: '1rem' }}
-        />
-      </Box>
-
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={totalCount}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                style={{ marginTop: "1rem" }}
+              />
+            </Box>
           </main>
         </div>
         <div className="footer">

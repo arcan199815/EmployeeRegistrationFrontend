@@ -36,19 +36,19 @@ function CreateUserComponent() {
   });
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const [confirmpassword, setConfirmPassword] = useState("");
-  const [isOpened, setIsOpened] = useState(true); 
+  const [isOpened, setIsOpened] = useState(true);
   const [searchQuery, setSearchQuery] = useState(null);
-  const [employee, setEmployee] = useState([]); 
-  const [totalCount, setTotalCount] = useState(0); 
-  const [Id, setId] = useState(0); 
+  const [employee, setEmployee] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [Id, setId] = useState(0);
   const location = useLocation();
-  const { users } = location.state|| {};
+  const { users } = location.state || {};
   const { logout } = useAuth(); //
   const [page, setPage] = useState(0); //
   const [rowsPerPage, setRowsPerPage] = useState(6); //
-  const { token, role } = useAuth(); 
+  const { token, role } = useAuth();
   const [edit, setEdit] = useState(false);
-  const [visibleBar,setVisibleBar]= useState(false);
+  const [visibleBar, setVisibleBar] = useState(false);
 
   const navigateToRole = () => {
     navigate("/layoutrole");
@@ -60,6 +60,10 @@ function CreateUserComponent() {
 
   const navigateToEmployeeDashboard = () => {
     navigate("/layout");
+  };
+
+  const navigatetoTimeSheet = () => {
+    navigate("/timesheet");
   };
 
   const navigateToUser = () => {
@@ -106,27 +110,26 @@ function CreateUserComponent() {
       toast.error("Email Required");
       return;
     }
-    if(!edit){
-    if (
-      formData.password == null ||
-      formData.password == undefined ||
-      formData.password == ""
-    ) {
-      toast.error("Password Required");
-      return;
+    if (!edit) {
+      if (
+        formData.password == null ||
+        formData.password == undefined ||
+        formData.password == ""
+      ) {
+        toast.error("Password Required");
+        return;
+      }
+      if (!validatePassword(formData.password)) {
+        toast.error(
+          "Password should be atleast 8 characters long with one capital letter, one small letter, one number and one special characters"
+        );
+        return;
+      }
+      if (confirmpassword != formData.password) {
+        toast.error("Password Didnot Match");
+        return;
+      }
     }
-    if (!validatePassword(formData.password)) {
-      toast.error(
-        "Password should be atleast 8 characters long with one capital letter, one small letter, one number and one special characters"
-      );
-      return;
-    }
-    if (confirmpassword != formData.password) {
-      toast.error("Password Didnot Match");
-      return;
-    }
-
-  }
     if (formData.role == null || formData.role == "") {
       toast.error("Role Required");
       return;
@@ -169,7 +172,7 @@ function CreateUserComponent() {
     try {
       debugger;
       const data = await UserService.fetchUserById(users.iuserId);
-      console.log('Fetched employee registration:', data);
+      console.log("Fetched employee registration:", data);
       setFormData({
         username: data.vuserName,
         role: data.vrole,
@@ -177,29 +180,27 @@ function CreateUserComponent() {
         //password: data.vpassword,
       });
       debugger;
-      
     } catch (error) {
-      console.error('Error fetching employee registration:', error);
+      console.error("Error fetching employee registration:", error);
     }
   };
 
   useEffect(() => {
     debugger;
     //contentRef.current = document.querySelector('.main');
-    if(role=="Employee")
-      {
-        setVisibleBar(true);
-      }
+    if (role == "Employee") {
+      setVisibleBar(true);
+    }
     setLoading(false);
-    if(users){
+    if (users) {
       setEdit(true);
-    fetchDataById(); // Set loading to false once initialization is done
+      fetchDataById(); // Set loading to false once initialization is done
     }
   }, []);
 
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       <div className="Layout">
         <div className="header">
           <div className="icon" onClick={() => setIsOpened(!isOpened)}>
@@ -245,6 +246,27 @@ function CreateUserComponent() {
                 </Typography>
               </Paper>
             </Grid>
+
+            <Grid item xs={12}>
+              <Paper
+                style={{
+                  padding: "1rem",
+                  textAlign: "center",
+                  background: "#adaaaa",
+                  cursor: "pointer",
+                }}
+                onClick={navigatetoTimeSheet}
+              >
+                <Typography
+                  variant="h14"
+                  color="#090305"
+                  fontFamily=' "Playwrite CU", cursive;'
+                >
+                  Time Sheet
+                </Typography>
+              </Paper>
+            </Grid>
+
             <Grid item xs={12}>
               <Paper
                 style={{
@@ -264,44 +286,48 @@ function CreateUserComponent() {
                 </Typography>
               </Paper>
             </Grid>
-            {!visibleBar &&<Grid item xs={12}>
-              <Paper
-                style={{
-                  padding: "1rem",
-                  textAlign: "center",
-                  background: "#adaaaa",
-                  cursor: "pointer",
-                }}
-                onClick={navigateToUser}
-              >
-                <Typography
-                  variant="h14"
-                  color="#090305"
-                  fontFamily=' "Playwrite CU", cursive;'
+            {!visibleBar && (
+              <Grid item xs={12}>
+                <Paper
+                  style={{
+                    padding: "1rem",
+                    textAlign: "center",
+                    background: "#adaaaa",
+                    cursor: "pointer",
+                  }}
+                  onClick={navigateToUser}
                 >
-                  User
-                </Typography>
-              </Paper>
-            </Grid>}
-            {!visibleBar && <Grid item xs={12}>
-              <Paper
-                style={{
-                  padding: "1rem",
-                  textAlign: "center",
-                  background: "#adaaaa",
-                  cursor: "pointer",
-                }}
-                onClick={navigateToRole}
-              >
-                <Typography
-                  variant="h14"
-                  color="#090305"
-                  fontFamily=' "Playwrite CU", cursive;'
+                  <Typography
+                    variant="h14"
+                    color="#090305"
+                    fontFamily=' "Playwrite CU", cursive;'
+                  >
+                    User
+                  </Typography>
+                </Paper>
+              </Grid>
+            )}
+            {!visibleBar && (
+              <Grid item xs={12}>
+                <Paper
+                  style={{
+                    padding: "1rem",
+                    textAlign: "center",
+                    background: "#adaaaa",
+                    cursor: "pointer",
+                  }}
+                  onClick={navigateToRole}
                 >
-                  Role
-                </Typography>
-              </Paper>
-            </Grid>}
+                  <Typography
+                    variant="h14"
+                    color="#090305"
+                    fontFamily=' "Playwrite CU", cursive;'
+                  >
+                    Role
+                  </Typography>
+                </Paper>
+              </Grid>
+            )}
             <Grid item xs={12}>
               <Paper
                 style={{
@@ -323,96 +349,105 @@ function CreateUserComponent() {
             </Grid>
           </aside>
           <main className="main">
-          <Box display="flex" alignItems="center" justifyContent="flex-start" sx={{ mb: 2 }}>
-          <ArrowBackIcon
-          style={{
-            cursor: "pointer",
-            fontSize: 32, // Adjust size as needed
-            color: "primary", // Adjust color as needed
-          }}
-          onClick={navigateToUser} // Attach click event for going back
-        />
-      </Box>
-          
-          <ThemeProvider theme={defaultTheme}>
-        <Container component="main" maxWidth="sm">
-          <CssBaseline />
-          <Box
-            sx={{
-              marginTop: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="flex-start"
+              sx={{ mb: 2 }}
+            >
+              <ArrowBackIcon
+                style={{
+                  cursor: "pointer",
+                  fontSize: 32, // Adjust size as needed
+                  color: "primary", // Adjust color as needed
+                }}
+                onClick={navigateToUser} // Attach click event for going back
+              />
+            </Box>
+
+            <ThemeProvider theme={defaultTheme}>
+              <Container component="main" maxWidth="sm">
+                <CssBaseline />
+                <Box
+                  sx={{
+                    marginTop: 8,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar> */}
-            
-            <Typography component="h1" variant="h5">
-              Add User
-            </Typography>
-            <Box
-              component="form"
-              noValidate
-              //onSubmit={handleSubmit}
-              sx={{ mt: 3 }}
-            >
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    autoComplete="given-name"
-                    name="username"
-                    required
-                    fullWidth
-                    id="username"
-                    label="User Name"
-                    value={formData.username}
-                    disabled={edit}
-                    onChange={handleInputChange}
-                    autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    disabled={edit}
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    autoComplete="email"
-                  />
-                </Grid>
-                {!edit && <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    autoComplete="new-password"
-                  />
-                </Grid>}
-                {!edit &&<Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="confirmpassword"
-                    label="Confirm Password"
-                    type="password"
-                    id="confirmpassword"
-                    value={confirmpassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    autoComplete="new-password"
-                  />
-                </Grid>}
-                {/* <Grid item xs={12}>
+
+                  <Typography component="h1" variant="h5">
+                    Add User
+                  </Typography>
+                  <Box
+                    component="form"
+                    noValidate
+                    //onSubmit={handleSubmit}
+                    sx={{ mt: 3 }}
+                  >
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <TextField
+                          autoComplete="given-name"
+                          name="username"
+                          required
+                          fullWidth
+                          id="username"
+                          label="User Name"
+                          value={formData.username}
+                          disabled={edit}
+                          onChange={handleInputChange}
+                          autoFocus
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          required
+                          fullWidth
+                          id="email"
+                          label="Email Address"
+                          name="email"
+                          disabled={edit}
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          autoComplete="email"
+                        />
+                      </Grid>
+                      {!edit && (
+                        <Grid item xs={12}>
+                          <TextField
+                            required
+                            fullWidth
+                            name="password"
+                            label="Password"
+                            type="password"
+                            id="password"
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            autoComplete="new-password"
+                          />
+                        </Grid>
+                      )}
+                      {!edit && (
+                        <Grid item xs={12}>
+                          <TextField
+                            required
+                            fullWidth
+                            name="confirmpassword"
+                            label="Confirm Password"
+                            type="password"
+                            id="confirmpassword"
+                            value={confirmpassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            autoComplete="new-password"
+                          />
+                        </Grid>
+                      )}
+                      {/* <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -425,48 +460,50 @@ function CreateUserComponent() {
                   //autoComplete="new-password"
                 />
               </Grid> */}
-                <Grid item xs={12} >
-                  <FormControl fullWidth required>
-                    <InputLabel id="role-label">Role</InputLabel>
-                    <Select
-                      labelId="role-label"
-                      id="role"
-                      name="role"
-                      value={formData.role}
-                      onChange={handleInputChange}
-                      label="Gender"
-                      autoComplete="sex"
-                      disabled={edit}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value="Admin">Admin</MenuItem>
-                      <MenuItem value="Employee">Employee</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-              </Grid>
-              {!edit && <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                onClick={handleSubmit}
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Add User
-              </Button>}
-              {/* <Grid container justifyContent="flex-end">
+                      <Grid item xs={12}>
+                        <FormControl fullWidth required>
+                          <InputLabel id="role-label">Role</InputLabel>
+                          <Select
+                            labelId="role-label"
+                            id="role"
+                            name="role"
+                            value={formData.role}
+                            onChange={handleInputChange}
+                            label="Gender"
+                            autoComplete="sex"
+                            disabled={edit}
+                          >
+                            <MenuItem value="">
+                              <em>None</em>
+                            </MenuItem>
+                            <MenuItem value="Admin">Admin</MenuItem>
+                            <MenuItem value="Employee">Employee</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                    {!edit && (
+                      <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        onClick={handleSubmit}
+                        sx={{ mt: 3, mb: 2 }}
+                      >
+                        Add User
+                      </Button>
+                    )}
+                    {/* <Grid container justifyContent="flex-end">
                 <Grid item>
                   <Link href="/" variant="body2">
                     Already have an account? Sign in
                   </Link>
                 </Grid>
               </Grid> */}
-            </Box>
-          </Box>
-        </Container>
-      </ThemeProvider>
+                  </Box>
+                </Box>
+              </Container>
+            </ThemeProvider>
           </main>
         </div>
         <div className="footer">

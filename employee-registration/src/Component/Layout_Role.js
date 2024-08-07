@@ -46,7 +46,7 @@ function Layout_Role() {
   const [page, setPage] = useState(0); //
   const [rowsPerPage, setRowsPerPage] = useState(5); //
   const { token, role } = useAuth(); //
-  const [visibleBar,setVisibleBar]= useState(false);
+  const [visibleBar, setVisibleBar] = useState(false);
 
   const handleChangePage = (event, newPage) => {
     debugger;
@@ -90,6 +90,10 @@ function Layout_Role() {
     navigate("/layout");
   };
 
+  const navigateToTimeSheet = () => {
+    navigate("/timesheet");
+  };
+
   const navigateLogout = async () => {
     debugger;
     await logout();
@@ -118,9 +122,7 @@ function Layout_Role() {
   const fetchData = async () => {
     try {
       debugger;
-      const data = await UserService.fetchRole(
-        token
-      );
+      const data = await UserService.fetchRole(token);
       console.log("Fetched Role:", data);
       setEmployee(data.userRoles);
       setTotalCount(data.totalCount);
@@ -132,9 +134,7 @@ function Layout_Role() {
   const deleteData = async (rowData) => {
     debugger;
     try {
-      await UserService.deleteRole(
-        rowData.iroleId
-      );
+      await UserService.deleteRole(rowData.iroleId);
       console.log("Records Deleted successfully");
       window.location.reload();
     } catch (error) {
@@ -143,10 +143,9 @@ function Layout_Role() {
   };
 
   useEffect(() => {
-    if(role=="Employee")
-      {
-        setVisibleBar(true);
-      }
+    if (role == "Employee") {
+      setVisibleBar(true);
+    }
     fetchData();
   }, []);
 
@@ -197,6 +196,27 @@ function Layout_Role() {
                 </Typography>
               </Paper>
             </Grid>
+
+            <Grid item xs={12}>
+              <Paper
+                style={{
+                  padding: "1rem",
+                  textAlign: "center",
+                  background: "#adaaaa",
+                  cursor: "pointer",
+                }}
+                onClick={navigateToTimeSheet}
+              >
+                <Typography
+                  variant="h14"
+                  color="#090305"
+                  fontFamily=' "Playwrite CU", cursive;'
+                >
+                  Time Sheet
+                </Typography>
+              </Paper>
+            </Grid>
+
             <Grid item xs={12}>
               <Paper
                 style={{
@@ -216,44 +236,48 @@ function Layout_Role() {
                 </Typography>
               </Paper>
             </Grid>
-            {!visibleBar && <Grid item xs={12}>
-              <Paper
-                style={{
-                  padding: "1rem",
-                  textAlign: "center",
-                  background: "#adaaaa",
-                  cursor: "pointer",
-                }}
-                onClick={navigateToUser}
-              >
-                <Typography
-                  variant="h14"
-                  color="#090305"
-                  fontFamily=' "Playwrite CU", cursive;'
+            {!visibleBar && (
+              <Grid item xs={12}>
+                <Paper
+                  style={{
+                    padding: "1rem",
+                    textAlign: "center",
+                    background: "#adaaaa",
+                    cursor: "pointer",
+                  }}
+                  onClick={navigateToUser}
                 >
-                  User
-                </Typography>
-              </Paper>
-            </Grid>}
-            {!visibleBar && <Grid item xs={12}>
-              <Paper
-                style={{
-                  padding: "1rem",
-                  textAlign: "center",
-                  background: "#adaaaa",
-                  cursor: "pointer",
-                }}
-                onClick={navigateToRole}
-              >
-                <Typography
-                  variant="h14"
-                  color="#090305"
-                  fontFamily=' "Playwrite CU", cursive;'
+                  <Typography
+                    variant="h14"
+                    color="#090305"
+                    fontFamily=' "Playwrite CU", cursive;'
+                  >
+                    User
+                  </Typography>
+                </Paper>
+              </Grid>
+            )}
+            {!visibleBar && (
+              <Grid item xs={12}>
+                <Paper
+                  style={{
+                    padding: "1rem",
+                    textAlign: "center",
+                    background: "#adaaaa",
+                    cursor: "pointer",
+                  }}
+                  onClick={navigateToRole}
                 >
-                  Role
-                </Typography>
-              </Paper>
-            </Grid>}
+                  <Typography
+                    variant="h14"
+                    color="#090305"
+                    fontFamily=' "Playwrite CU", cursive;'
+                  >
+                    Role
+                  </Typography>
+                </Paper>
+              </Grid>
+            )}
 
             <Grid item xs={12}>
               <Paper
@@ -311,7 +335,6 @@ function Layout_Role() {
                     <TableCell>Role Description</TableCell>
                   </TableRow>
                 </TableHead>
-
                 <TableBody>
                   {(rowsPerPage > 0
                     ? employee.slice(
@@ -334,7 +357,6 @@ function Layout_Role() {
                     </TableRow>
                   ))}
                 </TableBody>{" "}
-
               </Table>
               <TablePagination
                 rowsPerPageOptions={5} // Options for rows per page dropdown
