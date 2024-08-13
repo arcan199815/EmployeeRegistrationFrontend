@@ -67,9 +67,15 @@ const fetchTimesheetByEmailId = async (email) => {
   }
 };
 
+const deleteTimesheet = (id) => {
+  debugger;
+  return axios.post(`${API_URL}Timesheet/SoftDeleteTimesheet${id}`);
+};
+
 const TimesheetService = {
   postTimesheet,
   fetchTimesheetByEmailId,
+  deleteTimesheet,
 };
 
 export default TimesheetService;
