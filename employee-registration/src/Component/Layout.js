@@ -4,6 +4,13 @@ import {
   AccordionSummary,
   AccordionDetails,
   TablePagination,
+  CircularProgress,
+  ListItemText,
+  ListItem,
+  List,
+  CardContent,
+  CardHeader,
+  Card,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Avatar from "@mui/material/Avatar";
@@ -35,6 +42,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 
 function Layout() {
   const [isOpened, setIsOpened] = useState(true);
@@ -55,6 +63,22 @@ function Layout() {
     { name: 'Female', value: 300 },
     { name: 'Other', value: 300 }
   ]);
+
+const performanceData = [
+  { name: 'Jan', rating: 4.000 },
+  { name: 'Feb', rating: 3.000 },
+  { name: 'Mar', rating: 2.000 },
+  { name: 'Apr', rating: 2.780 },
+  { name: 'May', rating: 1.890 },
+  { name: 'Jun', rating: 2.390 },
+];
+  const [profile, setProfile] = useState({});
+
+  const upcomingEvents = [
+    { date: '2024-08-15', title: 'Team Meeting', description: 'Monthly team sync-up meeting.' },
+    { date: '2024-08-20', title: 'Project Deadline', description: 'Submission deadline for project X.' },
+    { date: '2024-08-25', title: 'Client Presentation', description: 'Presentation of the new features to the client.' }
+  ];
 
   const handleChangePage = (event, newPage) => {
     debugger;
@@ -77,6 +101,18 @@ function Layout() {
     setPage(0); // Reset page when search query changes
     fetchData();
   };
+
+  const leaveBalance = {
+    total: 20, // Total leave days
+    taken: 5,  // Leave days taken
+    remaining: 15 // Leave days remaining
+  };
+
+  const recentActivities = [
+    { date: '2024-08-12', title: 'Project Milestone Completed', description: 'Completed the project milestone 1.' },
+    { date: '2024-08-11', title: 'Weekly Report Submitted', description: 'Submitted the weekly report.' },
+    { date: '2024-08-10', title: 'Team Meeting Attended', description: 'Attended the team meeting.' }
+  ];
 
   // const filteredEmployees = employee.filter((row) =>
   //   row.vempName.toLowerCase().includes(searchQuery.toLowerCase())
@@ -147,6 +183,14 @@ function Layout() {
       console.log("Fetched employee registration:", data1);
       setEmployee(data1.employees);
       setTotalCount(data1.totalCount);
+      setProfile({
+        name: data1.employees[0].vempName,
+        email: data1.employees[0].vempEmailId,
+        empId: data1.employees[0].iempId,
+        DOB: data1.employees[0].vdob,
+        mobile: data1.employees[0].vemployeeMobileNumber,
+        avatar: 'https://via.placeholder.com/150'
+      });
       const genderDistribution = data1.employees.reduce((acc, curr) => {
         acc[curr.vgender] = (acc[curr.vgender] || 0) + 1;
         return acc;
@@ -162,6 +206,7 @@ function Layout() {
       setVisibleBar(true);
     }
     fetchData();
+    
   }, [role]);
 
   return (
@@ -370,8 +415,115 @@ function Layout() {
               )}
             </Grid>
            
+        {/* Profile Overview */}
+        {visibleBar &&<Grid item xs={12}>
+          <Paper style={{ padding: "1rem" }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={4} style={{ textAlign: 'left' }}>
+                <Avatar src={profile.avatar} style={{ width: 100, height: 100, marginLeft: 0, marginRight: 'auto' }} />
+              </Grid>
+              <Grid item xs={12} sm={8} style={{ textAlign: 'right' }}>
+                <Typography variant="h6">{profile.name}</Typography>
+                <Typography>Email: {profile.email}</Typography>
+                <Typography>EmployeeId: {profile.empId}</Typography>
+                <Typography>DOB: {profile.DOB}</Typography>
+                <Typography>Contact: {profile.mobile}</Typography>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>}
 
-            <TableContainer
+        {/* Performance Metrics */}
+        {visibleBar &&<Grid item xs={12}>
+          <Paper style={{ padding: "1rem", textAlign: "center" }}>
+            <Typography variant="h6">Performance Metrics</Typography>
+            {/* Add charts or metrics here */}
+            <ResponsiveContainer width="100%" height={300}>
+            <LineChart width={600} height={300} data={performanceData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="rating" stroke="#8884d8" />
+            </LineChart>
+            </ResponsiveContainer>
+          </Paper>
+        </Grid>}
+
+        {/* Leave Management */}
+        {visibleBar &&<Grid item xs={12}>
+          <Paper style={{ padding: "1rem", textAlign: "center" }}>
+            <Typography variant="h6">Leave Management</Typography>
+            {/* Add leave balance and requests here */}
+            <Grid container spacing={2} justifyContent="center" alignItems="center">
+      <Grid item xs={12} sm={4}>
+        <Typography variant="h6">Total Leave Days</Typography>
+        <Typography variant="body1">{leaveBalance.total} days</Typography>
+      </Grid>
+      <Grid item xs={12} sm={4}>
+        <Typography variant="h6">Leave Taken</Typography>
+        <Typography variant="body1">{leaveBalance.taken} days</Typography>
+      </Grid>
+      <Grid item xs={12} sm={4}>
+        <Typography variant="h6">Leave Remaining</Typography>
+        <Typography variant="body1">{leaveBalance.remaining} days</Typography>
+        <CircularProgress
+          variant="determinate"
+          value={(leaveBalance.remaining / leaveBalance.total) * 100}
+          size={100}
+          thickness={4}
+          style={{ marginTop: '1rem' }}
+        />
+      </Grid>
+    </Grid>
+          </Paper>
+        </Grid>}
+
+        {/* Upcoming Events */}
+        {visibleBar &&<Grid item xs={12}>
+          <Paper style={{ padding: "1rem", textAlign: "center" }}>
+            <Typography variant="h6">Upcoming Events</Typography>
+            {/* Add upcoming events here */}
+            <List>
+            {upcomingEvents.map((event, index) => (
+              <ListItem key={index}>
+                <ListItemText
+                  primary={`${event.date} - ${event.title}`}
+                  secondary={event.description}
+                />
+              </ListItem>
+            ))}
+          </List>
+          </Paper>
+        </Grid>}
+
+        {visibleBar && (
+      <Grid item xs={12}>
+        <Paper style={{ padding: '1rem' }}>
+          <Typography variant="h6" align="center" gutterBottom>
+            Recent Activities
+          </Typography>
+          <Grid container spacing={2}>
+          {recentActivities.map((activity, index) => (
+        <Grid item xs={12} sm={4} key={index}>
+          <Card>
+            <CardHeader
+              title={activity.title}
+              subheader={activity.date}
+            />
+            <CardContent>
+              <Typography variant="body2">{activity.description}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      ))}
+          </Grid>
+        </Paper>
+      </Grid>
+    )}
+
+            {!visibleBar &&<TableContainer
               component={Paper}
               fontFamily=' "Playwrite CU", cursive;'
             >
@@ -433,7 +585,7 @@ function Layout() {
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
               )}
-            </TableContainer>
+            </TableContainer>}
           </main>
         </div>
         {/* <div className="footer">

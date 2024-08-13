@@ -59,27 +59,7 @@ function TimeSheetComponent() {
   const [endDate, setEndDate] = useState(
     format(endOfWeek(new Date()), "yyyy-MM-dd")
   ); // Default to current week
-  const [formData, setFormData] = useState({
-    itimeSheetId: 0,
-    dstartDate: null,
-    dendDate: null,
-    vempName: "",
-    vemployeeEmailId: "",
-    vmon: "",
-    vtue: "",
-    vwed: "",
-    vthu: "",
-    vfri: "",
-    vsat: "",
-    vsun: "",
-    vmonNote: "",
-    vtueNote: "",
-    vwedNote: "",
-    vthuNote: "",
-    vfriNote: "",
-    vsatNote: "",
-    vsunNote: "",
-  });
+  const [formData, setFormData] = useState([]);
   const dummyData = [
     {
       id: 1,
@@ -438,15 +418,15 @@ function TimeSheetComponent() {
                   <TableHead>
                     <TableRow>
                       <TableCell>Employee</TableCell>
-                      {/* Display days from startDate to endDate */}
-                      {Array.from({ length: 7 }).map((_, index) => {
-                        const date = addDays(new Date(startDate), index);
-                        return (
-                          <TableCell key={date.toISOString()} align="center">
-                            {format(date, "EEE")}
-                          </TableCell>
-                        );
-                      })}
+                      <TableCell>Monday</TableCell>
+                      <TableCell>Tuesday</TableCell>
+                      <TableCell>Wednesday</TableCell>
+                      <TableCell>Thursday</TableCell>
+                      <TableCell>Friday</TableCell>
+                      <TableCell>Saturday</TableCell>
+                      <TableCell>Sunday</TableCell>
+                      <TableCell>Start Day</TableCell>
+                      <TableCell>End Day</TableCell>
                       <TableCell>Actions</TableCell>
                     </TableRow>
                   </TableHead>
@@ -455,17 +435,15 @@ function TimeSheetComponent() {
                       formData.map((row) => (
                         <TableRow key={row.id}>
                           <TableCell>{row.vempName}</TableCell>
-                          {Array.from({ length: 7 }).map((_, index) => {
-                            const date = addDays(new Date(startDate), index);
-                            return (
-                              <TableCell
-                                key={date.toISOString()}
-                                align="center"
-                              >
-                                {row.timesheet[format(date, "EEE")] || "-"}
-                              </TableCell>
-                            );
-                          })}
+                          <TableCell>{row.vmon}</TableCell>
+                          <TableCell>{row.vtue}</TableCell>
+                          <TableCell>{row.vwed}</TableCell>
+                          <TableCell>{row.vthu}</TableCell>
+                          <TableCell>{row.vfri}</TableCell>
+                          <TableCell>{row.vsat}</TableCell>
+                          <TableCell>{row.vsun}</TableCell>
+                          <TableCell>{row.dstartDate}</TableCell>
+                          <TableCell>{row.dendDate}</TableCell>
                           <TableCell>
                             <IconButton
                             //onClick={() => handleEdit(row)}

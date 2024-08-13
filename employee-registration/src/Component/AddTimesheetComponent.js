@@ -86,17 +86,17 @@ function AddTimeSheetComponent() {
     debugger;
     formData.vmon = timesheet.Mon;
     formData.vmonNote = notes.Mon;
-    formData.vtue = notes.Tue;
+    formData.vtue = timesheet.Tue;
     formData.vtueNote = notes.Tue;
-    formData.vwed = notes.Wed;
+    formData.vwed = timesheet.Wed;
     formData.vwedNote = notes.Wed;
-    formData.vthu = notes.Thu;
+    formData.vthu = timesheet.Thu;
     formData.vthuNote = notes.Thu;
-    formData.vfri = notes.Fri;
+    formData.vfri = timesheet.Fri;
     formData.vfriNote = notes.Fri;
-    formData.vsat = notes.Sat;
+    formData.vsat = timesheet.Sat;
     formData.vsatNote = notes.Sat;
-    formData.vsun = notes.Sun;
+    formData.vsun = timesheet.Sun;
     formData.vsunNote = notes.Sun;
     formData.dendDate = weekEndDate;
     formData.dstartDate = weekStartDate;
@@ -283,6 +283,7 @@ function AddTimeSheetComponent() {
 
   return (
     <>
+    <ToastContainer />
       <div className="Layout">
         <div className="header">
           <div className="icon" onClick={() => setIsOpened(!isOpened)}>
