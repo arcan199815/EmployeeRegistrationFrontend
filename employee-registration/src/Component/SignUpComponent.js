@@ -410,7 +410,7 @@ function SignUpComponent() {
               </Paper>
             </Grid>
 
-            <Grid item xs={12}>
+            {!visibleBar &&<Grid item xs={12}>
               <Paper
                 style={{
                   padding: "1rem",
@@ -428,7 +428,7 @@ function SignUpComponent() {
                   Employee Registration
                 </Typography>
               </Paper>
-            </Grid>
+            </Grid>}
             {!visibleBar && (
               <Grid item xs={12}>
                 <Paper
@@ -866,13 +866,13 @@ function SignUpComponent() {
             </ThemeProvider>
           </main>
         </div>
-        <div className="footer">
+        {/* <div className="footer">
           <p>
             &copy; {new Date().getFullYear()} XYZ Company. All rights reserved.
           </p>
           <br />
           <p>Contact: contact@xyzcompany.com | Phone: +1 (123) 456-7890</p>
-        </div>
+        </div> */}
       </div>
     </>
   );

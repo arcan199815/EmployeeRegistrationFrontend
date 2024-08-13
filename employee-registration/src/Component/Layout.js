@@ -34,6 +34,7 @@ import EditIcon from "@mui/icons-material/Edit"; // Import EditIcon from Materia
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
 function Layout() {
   const [isOpened, setIsOpened] = useState(true);
@@ -48,6 +49,12 @@ function Layout() {
   const { token, role, user, loggedInUserEmail } = useAuth();
   const [data, setData] = useState(null);
   const [visibleBar, setVisibleBar] = useState(false);
+  const COLORS = ['#FFBB28', '#FF8042', '#FF6384', '#36A2EB', '#4BC0C0'];
+  const [pieChartData, setPieChartData] = useState([
+    { name: 'Male', value: 400 },
+    { name: 'Female', value: 300 },
+    { name: 'Other', value: 300 }
+  ]);
 
   const handleChangePage = (event, newPage) => {
     debugger;
@@ -140,6 +147,11 @@ function Layout() {
       console.log("Fetched employee registration:", data1);
       setEmployee(data1.employees);
       setTotalCount(data1.totalCount);
+      const genderDistribution = data1.employees.reduce((acc, curr) => {
+        acc[curr.vgender] = (acc[curr.vgender] || 0) + 1;
+        return acc;
+      }, {});
+      setPieChartData(Object.entries(genderDistribution).map(([name, value]) => ({ name, value })));
     } catch (error) {
       console.error("Error fetching employee registration:", error);
     }
@@ -162,7 +174,7 @@ function Layout() {
           <div className="header-title">Employee Dashboard</div>
         </div>
         <div className="container">
-          <aside className={`${isOpened ? "opened" : ""} drawer`}>
+          <aside className={`drawer ${isOpened ? "opened" : ""} drawer`}>
             <Grid item xs={12}>
               <Paper
                 style={{
@@ -219,7 +231,7 @@ function Layout() {
               </Paper>
             </Grid>
 
-            <Grid item xs={12}>
+            {!visibleBar && <Grid item xs={12}>
               <Paper
                 style={{
                   padding: "1rem",
@@ -237,7 +249,7 @@ function Layout() {
                   Employee Registration
                 </Typography>
               </Paper>
-            </Grid>
+            </Grid>}
             {!visibleBar && (
               <Grid item xs={12}>
                 <Paper
@@ -312,7 +324,38 @@ function Layout() {
                     {!visibleBar ? "Employees" : "Personal Details"}
                   </Typography>
                 </Paper>
+                {/* //Pie Chart */}
+                {!visibleBar &&<Grid container spacing={2} mt={2}>
+              <Grid item >
+                <Paper style={{ padding: "1rem", textAlign: "center" }}>
+                  <Typography variant="h12" >Gender Distribution</Typography>
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <PieChart width={900} height={400} >
+                    <Pie
+                      data={pieChartData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={150}
+                      fill="#8884d8"
+                      label
+                    >
+                      {pieChartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                  </div>
+                </Paper>
               </Grid>
+            </Grid>
+          }
+              </Grid>
+               
+            
               {!visibleBar && (
                 <Grid item xs={12}>
                   <TextField
@@ -326,6 +369,8 @@ function Layout() {
                 </Grid>
               )}
             </Grid>
+           
+
             <TableContainer
               component={Paper}
               fontFamily=' "Playwrite CU", cursive;'
@@ -391,13 +436,13 @@ function Layout() {
             </TableContainer>
           </main>
         </div>
-        <div className="footer">
+        {/* <div className="footer">
           <p>
             &copy; {new Date().getFullYear()} XYZ Company. All rights reserved.
           </p>
           <br />
           <p>Contact: contact@xyzcompany.com | Phone: +1 (123) 456-7890</p>
-        </div>
+        </div> */}
       </div>
     </>
   );

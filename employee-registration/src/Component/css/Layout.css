@@ -1,23 +1,31 @@
 .Layout {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    color: #000133;
-  }
-  
-  .header,
-.footer {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: #000133;
+  margin: 0;
+  padding: 0;
+}
+
+.header {
   display: flex;
   background: #2ba4ef;
   height: 50px;
   align-items: center;
   justify-content: center;
   color: #090305;
+  position: fixed; /* Fix the header to the top */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10; /* Ensure header is above the sidebar and other content */
 }
 
 .icon {
   padding: 10px;
+  z-index: 11; /* Ensure the icon is above other content */
+  position: relative; /* Allow z-index to work */
 }
 
 .icon:hover {
@@ -31,30 +39,52 @@
   font-weight: 400;
   font-style: oblique;
 }
-  
-  .container {
-    display: flex;
-    flex: 1;
-    color: #813772;
-  }
-  
-  .drawer {
-    background: #adaaaa;
-    width: 0px;
-    transition: width 0.7s;
-    color: #813772;
-  }
-  
-  .opened {
-    width: 240px;
-  }
-  
-  .main {
-    flex: 1;
-    background: #f7f5f5;
-  }
 
-  .grid-container {
-    display: grid;
-    row-gap: 50px;
-  }
+.container {
+  display: flex;
+  flex: 1;
+  margin-top: 50px; /* Offset for the fixed header */
+  padding: 0;
+}
+
+.drawer {
+  background: #adaaaa;
+  width:0px;
+  height: calc(100vh - 50px); /* Full viewport height minus header height */
+  position: fixed; /* Fixed position to keep it in place */
+  top: 50px; /* Start below the header */
+  left: 0;
+  padding: 1rem;
+  z-index: 9; /* Ensure it is behind the header */
+  overflow-y: hidden;
+  overflow-x: hidden;
+  transition: width 1s ease;
+}
+
+.drawer.opened ~ .main {
+  margin-left: 260px; /* Adjust margin to match expanded width */
+  overflow-y: auto;
+}
+
+.opened {
+  width: 240px;
+}
+
+.main {
+  flex: 1;
+  background: #f7f5f5;
+  margin-left: 0px; /* Ensure content does not overlap with the sidebar */
+  padding: 1rem;
+  transition: margin-left 0.7s; /* Smooth transition when opening/closing drawer */
+}
+
+.footer {
+  background: #2ba4ef;
+  height: 50px;
+  color: #090305;
+  text-align: center;
+  padding: 1rem;
+  margin-top: auto; /* Push footer to the bottom */
+  z-index: 15; /* Ensure footer is above the sidebar */
+  position: relative; /* Ensure it stays in the normal flow of the document */
+}

@@ -213,6 +213,9 @@ function TimeSheetComponent() {
   };
 
   useEffect(() => {
+    if (role == "Employee") {
+        setVisibleBar(true);
+      }
     fetchData();
     const today = new Date();
     const startOfWeekDate = startOfWeek(today, { weekStartsOn: 1 }); // Start on Monday
@@ -288,7 +291,7 @@ function TimeSheetComponent() {
               </Paper>
             </Grid>
 
-            <Grid item xs={12}>
+            {!visibleBar &&<Grid item xs={12}>
               <Paper
                 style={{
                   padding: "1rem",
@@ -306,7 +309,7 @@ function TimeSheetComponent() {
                   Employee Registration
                 </Typography>
               </Paper>
-            </Grid>
+            </Grid>}
             {!visibleBar && (
               <Grid item xs={12}>
                 <Paper
@@ -460,13 +463,13 @@ function TimeSheetComponent() {
             </Box>
           </main>
         </div>
-        <div className="footer">
+        {/* <div className="footer">
           <p>
             &copy; {new Date().getFullYear()} XYZ Company. All rights reserved.
           </p>
           <br />
           <p>Contact: contact@xyzcompany.com | Phone: +1 (123) 456-7890</p>
-        </div>
+        </div> */}
       </div>
     </>
   );

@@ -24,14 +24,36 @@ import ClearIcon from "@mui/icons-material/Clear";
 function AddTimeSheetComponent() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { logout,role,loggedInUserName, loggedInUserEmail } = useAuth();
 
-  const [employeeName, setEmployeeName] = useState("");
+  const [employeeName, setEmployeeName] = useState(loggedInUserName);
   const [weekStartDate, setWeekStartDate] = useState(
     format(startOfWeek(new Date()), "yyyy-MM-dd")
   );
   const [weekEndDate, setWeekEndDate] = useState(
     format(endOfWeek(new Date()), "yyyy-MM-dd")
   );
+  const [formData, setFormData] = useState({
+    itimeSheetId : 0,
+    dstartDate : null,
+    dendDate : null,
+    vempName : '',
+    vemployeeEmailId : '',
+    vmon : '',
+    vtue : '',
+    vwed : '',
+    vthu : '',
+    vfri : '',
+    vsat : '',
+    vsun : '',
+    vmonNote : '',
+    vtueNote : '',
+    vwedNote : '',
+    vthuNote : '',
+    vfriNote : '',
+    vsatNote : '',
+    vsunNote : '',
+  })
   const [timesheet, setTimesheet] = useState({
     Mon: "",
     Tue: "",
@@ -54,7 +76,7 @@ function AddTimeSheetComponent() {
   const [isEditing, setIsEditing] = useState(false);
   const [visibleBar, setVisibleBar] = useState(false);
   const [isOpened, setIsOpened] = useState(true);
-  const { logout } = useAuth();
+  
 
   const navigateToUser = () => {
     navigate("/layoutuser");
@@ -83,6 +105,9 @@ function AddTimeSheetComponent() {
   };
 
   useEffect(() => {
+    if (role == "Employee") {
+        setVisibleBar(true);
+      }
     fetchEmployees();
     const today = new Date();
     const startOfWeekDate = startOfWeek(today, { weekStartsOn: 1 }); // Start on Monday
@@ -90,7 +115,7 @@ function AddTimeSheetComponent() {
     const endOfWeekDate = endOfWeek(startOfWeekDate);
     const state = location.state?.timesheet;
     if (state) {
-      setEmployeeName(state.employeeName);
+      setEmployeeName(loggedInUserName);
       setTimesheet(state.timesheet);
       setWeekStartDate(format(parseISO(state.weekStartDate), "yyyy-MM-dd"));
       setWeekEndDate(format(parseISO(state.weekEndDate), "yyyy-MM-dd"));
@@ -219,7 +244,7 @@ function AddTimeSheetComponent() {
               </Paper>
             </Grid>
 
-            <Grid item xs={12}>
+            {!visibleBar &&<Grid item xs={12}>
               <Paper
                 style={{
                   padding: "1rem",
@@ -237,7 +262,7 @@ function AddTimeSheetComponent() {
                   Employee Registration
                 </Typography>
               </Paper>
-            </Grid>
+            </Grid>}
             {!visibleBar && (
               <Grid item xs={12}>
                 <Paper
@@ -307,20 +332,16 @@ function AddTimeSheetComponent() {
                 {isEditing ? "Edit Timesheet" : "Add Timesheet"}
               </Typography>
 
-              <FormControl fullWidth variant="outlined" margin="normal">
-                <InputLabel>Employee</InputLabel>
-                <Select
-                  value={employeeName}
-                  onChange={handleEmployeeChange}
-                  label="Employee"
-                >
-                  {employees.map((employee) => (
-                    <MenuItem key={employee.id} value={employee.name}>
-                      {employee.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <TextField
+                type="employee"
+                label="Employee"
+                value={employeeName}
+                disabled
+                fullWidth
+                margin="normal"
+                InputLabelProps={{ shrink: true }}
+                variant="outlined"
+              />
 
               <TextField
                 type="date"
@@ -407,13 +428,13 @@ function AddTimeSheetComponent() {
             </Box>
           </main>
         </div>
-        <div className="footer">
+        {/* <div className="footer">
           <p>
             &copy; {new Date().getFullYear()} XYZ Company. All rights reserved.
           </p>
           <br />
           <p>Contact: contact@xyzcompany.com | Phone: +1 (123) 456-7890</p>
-        </div>
+        </div> */}
       </div>
     </>
   );

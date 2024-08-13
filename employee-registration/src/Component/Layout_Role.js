@@ -217,7 +217,7 @@ function Layout_Role() {
               </Paper>
             </Grid>
 
-            <Grid item xs={12}>
+            {!visibleBar &&<Grid item xs={12}>
               <Paper
                 style={{
                   padding: "1rem",
@@ -235,7 +235,7 @@ function Layout_Role() {
                   Employee Registration
                 </Typography>
               </Paper>
-            </Grid>
+            </Grid>}
             {!visibleBar && (
               <Grid item xs={12}>
                 <Paper
@@ -370,13 +370,13 @@ function Layout_Role() {
             </TableContainer>
           </main>
         </div>
-        <div className="footer">
+        {/* <div className="footer">
           <p>
             &copy; {new Date().getFullYear()} XYZ Company. All rights reserved.
           </p>
           <br />
           <p>Contact: contact@xyzcompany.com | Phone: +1 (123) 456-7890</p>
-        </div>
+        </div> */}
       </div>
     </>
   );
