@@ -37,15 +37,16 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import { format, startOfWeek, endOfWeek, addDays } from "date-fns";
+import TimesheetService from "../Services/TimesheetService";
 
 function TimeSheetComponent() {
-  const [isOpened, setIsOpened] = useState(true); //
+  const [isOpened, setIsOpened] = useState(true);
   const [searchQuery, setSearchQuery] = useState(null);
   const [employee, setEmployee] = useState([]); //
   const [totalCount, setTotalCount] = useState(0); //
   const [Id, setId] = useState(0); //
   const navigate = useNavigate();
-  const { logout } = useAuth(); //
+  const { logout, loggedInUserEmail } = useAuth(); //
   const [page, setPage] = useState(0); //
   const [rowsPerPage, setRowsPerPage] = useState(5); //
   const { token, role } = useAuth(); //
@@ -58,6 +59,27 @@ function TimeSheetComponent() {
   const [endDate, setEndDate] = useState(
     format(endOfWeek(new Date()), "yyyy-MM-dd")
   ); // Default to current week
+  const [formData, setFormData] = useState({
+    itimeSheetId: 0,
+    dstartDate: null,
+    dendDate: null,
+    vempName: "",
+    vemployeeEmailId: "",
+    vmon: "",
+    vtue: "",
+    vwed: "",
+    vthu: "",
+    vfri: "",
+    vsat: "",
+    vsun: "",
+    vmonNote: "",
+    vtueNote: "",
+    vwedNote: "",
+    vthuNote: "",
+    vfriNote: "",
+    vsatNote: "",
+    vsunNote: "",
+  });
   const dummyData = [
     {
       id: 1,
@@ -134,6 +156,21 @@ function TimeSheetComponent() {
 
     if (page * newRowsPerPage >= totalCount) {
       setPage(Math.floor(totalCount / newRowsPerPage));
+    }
+  };
+
+  const fetchDataById = async () => {
+    debugger;
+    try {
+      debugger;
+      const data = await TimesheetService.fetchTimesheetByEmailId(
+        loggedInUserEmail
+      );
+      console.log("Fetched employee registration:", data);
+      setFormData(data);
+      debugger;
+    } catch (error) {
+      console.error("Error fetching employee registration:", error);
     }
   };
 
@@ -214,8 +251,9 @@ function TimeSheetComponent() {
 
   useEffect(() => {
     if (role == "Employee") {
-        setVisibleBar(true);
-      }
+      setVisibleBar(true);
+      fetchDataById();
+    }
     fetchData();
     const today = new Date();
     const startOfWeekDate = startOfWeek(today, { weekStartsOn: 1 }); // Start on Monday
@@ -291,25 +329,27 @@ function TimeSheetComponent() {
               </Paper>
             </Grid>
 
-            {!visibleBar &&<Grid item xs={12}>
-              <Paper
-                style={{
-                  padding: "1rem",
-                  textAlign: "center",
-                  background: "#adaaaa",
-                  cursor: "pointer",
-                }}
-                onClick={navigateToEmployeeRegistration}
-              >
-                <Typography
-                  variant="h14"
-                  color="#090305"
-                  fontFamily=' "Playwrite CU", cursive;'
+            {!visibleBar && (
+              <Grid item xs={12}>
+                <Paper
+                  style={{
+                    padding: "1rem",
+                    textAlign: "center",
+                    background: "#adaaaa",
+                    cursor: "pointer",
+                  }}
+                  onClick={navigateToEmployeeRegistration}
                 >
-                  Employee Registration
-                </Typography>
-              </Paper>
-            </Grid>}
+                  <Typography
+                    variant="h14"
+                    color="#090305"
+                    fontFamily=' "Playwrite CU", cursive;'
+                  >
+                    Employee Registration
+                  </Typography>
+                </Paper>
+              </Grid>
+            )}
             {!visibleBar && (
               <Grid item xs={12}>
                 <Paper
@@ -411,10 +451,10 @@ function TimeSheetComponent() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {data.length > 0 ? (
-                      data.map((row) => (
+                    {formData.length > 0 ? (
+                      formData.map((row) => (
                         <TableRow key={row.id}>
-                          <TableCell>{row.employeeName}</TableCell>
+                          <TableCell>{row.vempName}</TableCell>
                           {Array.from({ length: 7 }).map((_, index) => {
                             const date = addDays(new Date(startDate), index);
                             return (

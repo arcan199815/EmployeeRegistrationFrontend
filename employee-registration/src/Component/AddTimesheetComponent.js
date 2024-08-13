@@ -20,11 +20,14 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useAuth } from "./AuthContext";
 import NotesIcon from "@mui/icons-material/Notes";
 import ClearIcon from "@mui/icons-material/Clear";
+import { toast, ToastContainer } from "react-toastify";
+import TimesheetService from "../Services/TimesheetService";
+import LoadingIndicator from "./LoadingIndicator";
 
 function AddTimeSheetComponent() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout,role,loggedInUserName, loggedInUserEmail } = useAuth();
+  const { logout, role, loggedInUserName, loggedInUserEmail } = useAuth();
 
   const [employeeName, setEmployeeName] = useState(loggedInUserName);
   const [weekStartDate, setWeekStartDate] = useState(
@@ -34,26 +37,26 @@ function AddTimeSheetComponent() {
     format(endOfWeek(new Date()), "yyyy-MM-dd")
   );
   const [formData, setFormData] = useState({
-    itimeSheetId : 0,
-    dstartDate : null,
-    dendDate : null,
-    vempName : '',
-    vemployeeEmailId : '',
-    vmon : '',
-    vtue : '',
-    vwed : '',
-    vthu : '',
-    vfri : '',
-    vsat : '',
-    vsun : '',
-    vmonNote : '',
-    vtueNote : '',
-    vwedNote : '',
-    vthuNote : '',
-    vfriNote : '',
-    vsatNote : '',
-    vsunNote : '',
-  })
+    itimeSheetId: 0,
+    dstartDate: null,
+    dendDate: null,
+    vempName: loggedInUserName,
+    vemployeeEmailId: loggedInUserEmail,
+    vmon: "",
+    vtue: "",
+    vwed: "",
+    vthu: "",
+    vfri: "",
+    vsat: "",
+    vsun: "",
+    vmonNote: "",
+    vtueNote: "",
+    vwedNote: "",
+    vthuNote: "",
+    vfriNote: "",
+    vsatNote: "",
+    vsunNote: "",
+  });
   const [timesheet, setTimesheet] = useState({
     Mon: "",
     Tue: "",
@@ -76,7 +79,108 @@ function AddTimeSheetComponent() {
   const [isEditing, setIsEditing] = useState(false);
   const [visibleBar, setVisibleBar] = useState(false);
   const [isOpened, setIsOpened] = useState(true);
-  
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit1 = async (event) => {
+    event.preventDefault();
+    debugger;
+    formData.vmon = timesheet.Mon;
+    formData.vmonNote = notes.Mon;
+    formData.vtue = notes.Tue;
+    formData.vtueNote = notes.Tue;
+    formData.vwed = notes.Wed;
+    formData.vwedNote = notes.Wed;
+    formData.vthu = notes.Thu;
+    formData.vthuNote = notes.Thu;
+    formData.vfri = notes.Fri;
+    formData.vfriNote = notes.Fri;
+    formData.vsat = notes.Sat;
+    formData.vsatNote = notes.Sat;
+    formData.vsun = notes.Sun;
+    formData.vsunNote = notes.Sun;
+    formData.dendDate = weekEndDate;
+    formData.dstartDate = weekStartDate;
+    // Check for required fields
+
+    if (!formData.dstartDate) {
+      toast.error("Start date is required");
+      return;
+    }
+    if (!formData.dendDate) {
+      toast.error("End date is required");
+      return;
+    }
+    if (!formData.vempName) {
+      toast.error("Employee name is required");
+      return;
+    }
+    if (!formData.vemployeeEmailId) {
+      toast.error("Email Id is required");
+      return;
+    }
+    if (!formData.vmon) {
+      toast.error("monday is required");
+      return;
+    }
+    if (formData.vmon && !formData.vmonNote) {
+      toast.error("Monday note is required when Monday is filled");
+      return;
+    }
+    if (!formData.vtue) {
+      toast.error("Tuesday is required");
+      return;
+    }
+    if (formData.vtue && !formData.vtueNote) {
+      toast.error("Tuesday note is required when Tuesday is filled");
+      return;
+    }
+    if (!formData.vwed) {
+      toast.error("Wednesday is required");
+      return;
+    }
+    if (formData.vwed && !formData.vwedNote) {
+      toast.error("Wednesday note is required when Wednesday is filled");
+      return;
+    }
+    if (!formData.vthu) {
+      toast.error("Thursday is required");
+      return;
+    }
+    if (formData.vthu && !formData.vthuNote) {
+      toast.error("Thursday note is required when Thursday is filled");
+      return;
+    }
+    if (!formData.vfri) {
+      toast.error("Friday is required");
+      return;
+    }
+    if (formData.vfri && !formData.vfriNote) {
+      toast.error("Friday note is required when Friday is filled");
+      return;
+    }
+
+    try {
+      // Call the register function from AuthService
+      setLoading(false);
+      const userData = await TimesheetService.postTimesheet(formData);
+      debugger;
+      if (userData.data == true) {
+        toast.success("Timesheet added successfully", {
+          autoClose: 5000, // 5000 milliseconds = 5 seconds
+        });
+      } else {
+        toast.error("Timesheet submission failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Timesheet error:", error);
+      toast.error("An error occurred. Please try again.");
+    } finally {
+      setTimeout(() => {
+        navigate("/timesheet");
+      }, 5000); // Navigate to another route upon success
+      setLoading(false); // Stop loading state
+    }
+  };
 
   const navigateToUser = () => {
     navigate("/layoutuser");
@@ -106,8 +210,8 @@ function AddTimeSheetComponent() {
 
   useEffect(() => {
     if (role == "Employee") {
-        setVisibleBar(true);
-      }
+      setVisibleBar(true);
+    }
     fetchEmployees();
     const today = new Date();
     const startOfWeekDate = startOfWeek(today, { weekStartsOn: 1 }); // Start on Monday
@@ -244,25 +348,27 @@ function AddTimeSheetComponent() {
               </Paper>
             </Grid>
 
-            {!visibleBar &&<Grid item xs={12}>
-              <Paper
-                style={{
-                  padding: "1rem",
-                  textAlign: "center",
-                  background: "#adaaaa",
-                  cursor: "pointer",
-                }}
-                onClick={navigateToEmployeeRegistration}
-              >
-                <Typography
-                  variant="h14"
-                  color="#090305"
-                  fontFamily=' "Playwrite CU", cursive;'
+            {!visibleBar && (
+              <Grid item xs={12}>
+                <Paper
+                  style={{
+                    padding: "1rem",
+                    textAlign: "center",
+                    background: "#adaaaa",
+                    cursor: "pointer",
+                  }}
+                  onClick={navigateToEmployeeRegistration}
                 >
-                  Employee Registration
-                </Typography>
-              </Paper>
-            </Grid>}
+                  <Typography
+                    variant="h14"
+                    color="#090305"
+                    fontFamily=' "Playwrite CU", cursive;'
+                  >
+                    Employee Registration
+                  </Typography>
+                </Paper>
+              </Grid>
+            )}
             {!visibleBar && (
               <Grid item xs={12}>
                 <Paper
@@ -412,7 +518,7 @@ function AddTimeSheetComponent() {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={handleSubmit}
+                  onClick={handleSubmit1}
                 >
                   {isEditing ? "Update Timesheet" : "Add Timesheet"}
                 </Button>
