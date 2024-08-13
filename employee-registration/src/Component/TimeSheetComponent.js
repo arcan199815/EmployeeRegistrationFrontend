@@ -241,7 +241,7 @@ function TimeSheetComponent() {
   const deleteData = async (rowData) => {
     debugger;
     try {
-      await UserService.deleteRole(rowData.iroleId);
+      await TimesheetService.deleteTimesheet(rowData.itimeSheetId);
       console.log("Records Deleted successfully");
       window.location.reload();
     } catch (error) {
@@ -472,9 +472,7 @@ function TimeSheetComponent() {
                             >
                               <EditIcon color="primary" />
                             </IconButton>
-                            <IconButton
-                            //onClick={() => handleDelete(row)}
-                            >
+                            <IconButton onClick={() => deleteData(row)}>
                               <DeleteIcon color="error" />
                             </IconButton>
                           </TableCell>
