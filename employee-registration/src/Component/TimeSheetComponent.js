@@ -206,7 +206,7 @@ function TimeSheetComponent() {
   // };
 
   const editData = async (rowData) => {
-    navigate("/signupemployee", { state: { employees: rowData } });
+    navigate("/edit-timesheet", { state: { timesheetData: rowData } });
   };
 
   const fetchData = async () => {
@@ -446,7 +446,7 @@ function TimeSheetComponent() {
                           <TableCell>{row.dendDate}</TableCell>
                           <TableCell>
                             <IconButton
-                            //onClick={() => handleEdit(row)}
+                            onClick={() => editData(row)}
                             >
                               <EditIcon color="primary" />
                             </IconButton>

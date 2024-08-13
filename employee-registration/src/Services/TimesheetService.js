@@ -24,6 +24,7 @@ const requestData = {
   vsunNote: "",
 };
 
+
 const postTimesheet = async (formData) => {
   debugger;
 
@@ -38,8 +39,8 @@ const postTimesheet = async (formData) => {
   requestData.vwed = formData.vwed;
   requestData.vthu = formData.vthu;
   requestData.vfri = formData.vfri;
-  requestData.vsat = requestData.vsat;
-  requestData.vsun = requestData.vsun;
+  requestData.vsat = formData.vsat;
+  requestData.vsun = formData.vsun;
   requestData.vmonNote = formData.vmonNote;
   requestData.vtueNote = formData.vtueNote;
   requestData.vwedNote = formData.vwedNote;
@@ -67,15 +68,31 @@ const fetchTimesheetByEmailId = async (email) => {
   }
 };
 
+const fetchTimesheetById = async (id) => {
+  try {
+    debugger;
+    const response = await axios.get(
+      `${API_URL}TimeSheet/GetById?id=${id}`,
+      {}
+    );
+    return response.data;
+  } catch (error) {
+    // Handle error
+    console.error("Error fetching Timesheet:", error);
+    throw error; // Optionally rethrow or handle as needed
+  }
+};
+
 const deleteTimesheet = (id) => {
   debugger;
-  return axios.post(`${API_URL}Timesheet/SoftDeleteTimesheet${id}`);
+  return axios.post(`${API_URL}Timesheet/SoftDeleteTimesheet?id=${id}`);
 };
 
 const TimesheetService = {
   postTimesheet,
   fetchTimesheetByEmailId,
   deleteTimesheet,
+  fetchTimesheetById,
 };
 
 export default TimesheetService;

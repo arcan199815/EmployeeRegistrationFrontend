@@ -33,6 +33,7 @@ function AddTimeSheetComponent() {
   const [weekStartDate, setWeekStartDate] = useState(
     format(startOfWeek(new Date()), "yyyy-MM-dd")
   );
+  const [edit, setEdit] = useState(false);
   const [weekEndDate, setWeekEndDate] = useState(
     format(endOfWeek(new Date()), "yyyy-MM-dd")
   );
@@ -80,6 +81,7 @@ function AddTimeSheetComponent() {
   const [visibleBar, setVisibleBar] = useState(false);
   const [isOpened, setIsOpened] = useState(true);
   const [loading, setLoading] = useState(false);
+  const { timesheetData } = location.state || {};
 
   const handleSubmit1 = async (event) => {
     event.preventDefault();
@@ -212,7 +214,13 @@ function AddTimeSheetComponent() {
     if (role == "Employee") {
       setVisibleBar(true);
     }
-    fetchEmployees();
+    if (timesheetData) {
+        setFormData(timesheetData);
+        setEdit(true);
+
+        fetchDataById(); // Set loading to false once initialization is done
+      }
+    //fetchEmployees();
     const today = new Date();
     const startOfWeekDate = startOfWeek(today, { weekStartsOn: 1 }); // Start on Monday
     setWeekStartDate(format(startOfWeekDate, "yyyy-MM-dd"));
@@ -233,12 +241,34 @@ function AddTimeSheetComponent() {
     alert(`Note for ${day}: ${notes[day]}`);
   };
 
-  const fetchEmployees = async () => {
+  const fetchDataById = async () => {
+    debugger;
     try {
-      const response = await UserService.getEmployees();
-      setEmployees(response.data);
+    timesheet.Mon=timesheetData.vmon;
+    notes.Mon = timesheetData.vmonNote;
+    timesheet.Tue=timesheetData.vtue;
+    notes.Tue= timesheetData.vtueNote ;
+    timesheet.Wed=timesheetData.vwed ;
+    notes.Wed=timesheetData.vwedNote ;
+    timesheet.Thu=timesheetData.vthu ;
+    notes.Thu=timesheetData.vthuNote ;
+    timesheet.Fri=timesheetData.vfri ;
+    notes.Fri=timesheetData.vfriNote ;
+    timesheet.Sat=timesheetData.vsat ;
+    notes.Sat=timesheetData.vsatNote;
+    timesheet.Sun=timesheetData.vsun ;
+    notes.Sun=timesheetData.vsunNote ;
+    weekEndDate=timesheetData.dendDate ;
+    weekStartDate=timesheetData.dstartDate;
+      debugger;
+      const data = await TimesheetService.fetchTimesheetById(
+        timesheetData.itimeSheetId
+      );
+      console.log("Fetched employee registration:", data);
+      setFormData(data);
+      debugger;
     } catch (error) {
-      console.error("Error fetching employees:", error);
+      console.error("Error fetching employee registration:", error);
     }
   };
 
@@ -453,7 +483,7 @@ function AddTimeSheetComponent() {
               <TextField
                 type="date"
                 label="Week Start Date (Monday)"
-                value={weekStartDate}
+                value={formData.dstartDate}
                 onChange={handleDateChange}
                 fullWidth
                 margin="normal"
