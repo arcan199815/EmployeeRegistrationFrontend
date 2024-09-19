@@ -197,7 +197,7 @@ function Layout_Role() {
               </Paper>
             </Grid>
 
-            <Grid item xs={12}>
+            {visibleBar &&<Grid item xs={12}>
               <Paper
                 style={{
                   padding: "1rem",
@@ -215,7 +215,7 @@ function Layout_Role() {
                   Time Sheet
                 </Typography>
               </Paper>
-            </Grid>
+            </Grid>}
 
             {!visibleBar &&<Grid item xs={12}>
               <Paper

@@ -239,6 +239,7 @@ function TimeSheetComponent() {
     const startOfWeekDate = startOfWeek(today, { weekStartsOn: 1 }); // Start on Monday
     setStartDate(startOfWeekDate);
     const endOfWeekDate = endOfWeek(startOfWeekDate);
+    
   }, []);
 
   return (
@@ -289,7 +290,7 @@ function TimeSheetComponent() {
               </Paper>
             </Grid>
 
-            <Grid item xs={12}>
+            {visibleBar &&<Grid item xs={12}>
               <Paper
                 style={{
                   padding: "1rem",
@@ -307,7 +308,7 @@ function TimeSheetComponent() {
                   Time Sheet
                 </Typography>
               </Paper>
-            </Grid>
+            </Grid>}
 
             {!visibleBar && (
               <Grid item xs={12}>
@@ -397,21 +398,23 @@ function TimeSheetComponent() {
             <Typography variant="h4" gutterBottom>
               Weekly Timesheets
             </Typography>
-            <TextField
+            {/* <TextField
               type="date"
               label="Start Date (Monday)"
               value={startDate}
               onChange={handleStartDateChange}
               style={{ marginBottom: "1rem", width: "100%" }}
               InputLabelProps={{ shrink: true }}
-            />
+            /> */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '16px' }}>
             <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate("/add-timesheet")}
+                variant="contained"
+                color="primary"
+                onClick={() => navigate("/add-timesheet")}
             >
-              Add New Timesheet
+                Add New Timesheet
             </Button>
+            </div>
             <Box sx={{ marginTop: 2 }}>
               <TableContainer component={Paper}>
                 <Table>
@@ -466,7 +469,7 @@ function TimeSheetComponent() {
                   </TableBody>
                 </Table>
               </TableContainer>
-              <TablePagination
+              {/* <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
                 count={totalCount}
@@ -475,7 +478,7 @@ function TimeSheetComponent() {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
                 style={{ marginTop: "1rem" }}
-              />
+              /> */}
             </Box>
           </main>
         </div>

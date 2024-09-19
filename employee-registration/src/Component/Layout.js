@@ -256,7 +256,7 @@ const performanceData = [
                 </Typography>
               </Paper>
             </Grid>
-            <Grid item xs={12}>
+            {visibleBar &&<Grid item xs={12}>
               <Paper
                 style={{
                   padding: "1rem",
@@ -274,7 +274,7 @@ const performanceData = [
                   Time Sheet
                 </Typography>
               </Paper>
-            </Grid>
+            </Grid>}
 
             {!visibleBar && <Grid item xs={12}>
               <Paper

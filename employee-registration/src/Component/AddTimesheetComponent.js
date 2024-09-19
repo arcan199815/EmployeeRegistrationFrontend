@@ -13,7 +13,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import { format, startOfWeek, endOfWeek, parseISO } from "date-fns";
+import { format, startOfWeek, endOfWeek, parseISO, addDays } from "date-fns";
 import UserService from "../Services/UserService";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -258,14 +258,15 @@ function AddTimeSheetComponent() {
     notes.Sat=timesheetData.vsatNote;
     timesheet.Sun=timesheetData.vsun ;
     notes.Sun=timesheetData.vsunNote ;
-    weekEndDate=timesheetData.dendDate ;
-    weekStartDate=timesheetData.dstartDate;
+    setWeekEndDate(timesheetData.dendDate) ;
+    setWeekStartDate(timesheetData.dstartDate);
       debugger;
       const data = await TimesheetService.fetchTimesheetById(
         timesheetData.itimeSheetId
       );
       console.log("Fetched employee registration:", data);
       setFormData(data);
+      setWeekStartDate(data.dstartDate);
       debugger;
     } catch (error) {
       console.error("Error fetching employee registration:", error);
@@ -301,10 +302,15 @@ function AddTimeSheetComponent() {
   };
 
   const handleDateChange = (event) => {
+    debugger;
     const selectedDate = new Date(event.target.value);
     const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 }); // Start on Monday
+    const weekEnd = endOfWeek(weekStart, { weekStartsOn: 1 });
+
+    // Add one more week to get to the next week's Sunday
+    //const nextWeekEnd = addDays(weekEnd, 1);
     setWeekStartDate(format(weekStart, "yyyy-MM-dd"));
-    setWeekEndDate(format(endOfWeek(weekStart), "yyyy-MM-dd"));
+    setWeekEndDate(format(weekEnd, "yyyy-MM-dd"));
   };
 
   const handleTimesheetChange = (day) => (event) => {
@@ -359,7 +365,7 @@ function AddTimeSheetComponent() {
                 </Typography>
               </Paper>
             </Grid>
-            <Grid item xs={12}>
+            {visibleBar &&<Grid item xs={12}>
               <Paper
                 style={{
                   padding: "1rem",
@@ -377,7 +383,7 @@ function AddTimeSheetComponent() {
                   Time Sheet
                 </Typography>
               </Paper>
-            </Grid>
+            </Grid>}
 
             {!visibleBar && (
               <Grid item xs={12}>
@@ -483,7 +489,7 @@ function AddTimeSheetComponent() {
               <TextField
                 type="date"
                 label="Week Start Date (Monday)"
-                value={formData.dstartDate}
+                value={weekStartDate}
                 onChange={handleDateChange}
                 fullWidth
                 margin="normal"
